@@ -7,3 +7,7 @@ cpp_sandbox/inc/test.hpp
 cpp_sandbox/Debug/dsp.c_old
 cpp_sandbox/Debug/dsp.h_old
 /.metadata/
+DSP_Simulation/.cproject
+DSP_Simulation/.project
+DSP_Simulation/.settings/language.settings.xml
+DSP_Simulation/.settings/org.eclipse.cdt.managedbuilder.core.prefs
