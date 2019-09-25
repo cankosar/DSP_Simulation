@@ -29,7 +29,11 @@ int wave::read_wav(void) {
 
 	// open file
 	 printf("Opening  file %s\n",input_file);
+<<<<<<< Updated upstream:cpp_sandbox/src/wave.cpp
 	 printf("Done something\n");
+=======
+
+>>>>>>> Stashed changes:DSP_Simulation/src/wave.cpp
 
 	 ptr = fopen(input_file, "rb");
 	 if (ptr == NULL) {
