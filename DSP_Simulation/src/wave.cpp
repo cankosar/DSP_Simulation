@@ -29,11 +29,6 @@ int wave::read_wav(void) {
 
 	// open file
 	 printf("Opening  file %s\n",input_file);
-<<<<<<< Updated upstream:cpp_sandbox/src/wave.cpp
-	 printf("Done something\n");
-=======
-
->>>>>>> Stashed changes:DSP_Simulation/src/wave.cpp
 
 	 ptr = fopen(input_file, "rb");
 	 if (ptr == NULL) {
@@ -148,7 +143,7 @@ int wave::read_wav(void) {
 	 num_samples = (8 * header.data_size) / (header.channels * header.bits_per_sample);
 	// printf("Number of samples:%lu \n", num_samples);
 
-	 long size_of_each_sample = (header.channels * header.bits_per_sample) / 8;
+	 unsigned long size_of_each_sample = (header.channels * header.bits_per_sample) / 8;
 	 //printf("Size of each sample:%ld bytes\n", size_of_each_sample);
 
 	 // calculate duration of file
@@ -166,7 +161,7 @@ int wave::read_wav(void) {
 			int  size_is_correct = TRUE;
 
 			// make sure that the bytes-per-sample is completely divisible by num.of channels
-			long bytes_in_each_channel = (size_of_each_sample / header.channels);
+			unsigned long bytes_in_each_channel = (size_of_each_sample / header.channels);
 	//		printf("%u\n",size_of_each_sample);
 
 			if ((bytes_in_each_channel  * header.channels) != size_of_each_sample) {
@@ -189,7 +184,7 @@ int wave::read_wav(void) {
 						high_limit = 32767;
 						break;
 					case 32:
-						low_limit = -2147483648;
+						low_limit = -2147483648LL;
 						high_limit = 2147483647;
 						break;
 				}
