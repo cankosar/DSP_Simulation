@@ -30,6 +30,7 @@ int wave::read_wav(void) {
 	// open file
 	 printf("Opening  file %s\n",input_file);
 	 printf("Done something\n");
+	 printf("Done something else\n");
 
 
 
