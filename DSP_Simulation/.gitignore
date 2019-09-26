@@ -1,1 +1,4 @@
-Backup/
+Debug/
+.cproject
+.project
+.settings/
