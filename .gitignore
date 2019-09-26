@@ -12,3 +12,7 @@ DSP_Simulation/.project
 DSP_Simulation/.settings/language.settings.xml
 DSP_Simulation/.settings/org.eclipse.cdt.managedbuilder.core.prefs
 DSP_Simulation/samples/Guitar_Rythm_16bit_processed.wav
+DSP_Simulation/Debug/DSP_Simulation.exe
+DSP_Simulation/Debug/src/main.o
+DSP_Simulation/Debug/src/test.o
+DSP_Simulation/Debug/src/wave.o
