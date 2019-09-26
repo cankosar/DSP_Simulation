@@ -22,13 +22,13 @@ unsigned char buffer2[2];
 
  FILE *ptr;
 
-
+ struct HEADER header;
 
 int wave::read_wav(void) {
 
+
 	// open file
 	 printf("Opening  file %s\n",input_file);
-
 
 	 ptr = fopen(input_file, "rb");
 	 if (ptr == NULL) {
@@ -146,6 +146,13 @@ int wave::read_wav(void) {
 	 unsigned long size_of_each_sample = (header.channels * header.bits_per_sample) / 8;
 	 //printf("Size of each sample:%ld bytes\n", size_of_each_sample);
 
+	 // calculate duration of file
+	// float duration_in_seconds = (float) header.overall_size / header.byterate;
+	 //printf("Approx.Duration in seconds=%f\n", duration_in_seconds);
+	 //printf("Approx.Duration in h:m:s=%s\n", seconds_to_time(duration_in_seconds));
+
+
+
 	 // read each sample from data chunk if PCM
 	 if (header.format_type == 1) { // PCM
 
@@ -248,9 +255,42 @@ int wave::read_wav(void) {
 			} // 	if (size_is_correct) {
 	 }else{
 
+	//	 int print_len=100;
+	//	 float test=3.54;
+	//
+	//	 char hash[print_len*8];
+	//	 float dat[print_len];
+	//
+	//	 fread(hash, print_len*8, 1, ptr);
+	//
+	//	 //printf("Here\n");
+	//	 int n=0;
+	//
+	//
+	//	 for(n=0;n<print_len*8;n++){
+	//		 //printf("hash%d = %#X\n",n,hash[n]);
+	//
+	//	 }
+	//
+	//	 for(n=0;n<print_len;n++){
+	//	 dat[n]=hash[4*n] |
+	//				(hash[4*n+1]<<8) |
+	//				(hash[4*n+2]<<16) |
+	//				(hash[4*n+3]<<24);
+	//	 //printf("Float %d=%f\n",n,dat[n]);
+	//	 }
+
+
 	 }
 
+
+	 //  if (header.format_type == 1) {
+
+	 //printf("Closing file..\n");
 	 fclose(ptr);
+
+	  // cleanup before quitting
+//	 free(input_file);
 
 	 return 0;
 
@@ -290,3 +330,36 @@ int wave::write_wav(void) {
 //	free(filename);
 	return 0;
 }
+
+/**
+ * Convert seconds into hh:mm:ss format
+ * Params:
+ *	seconds - seconds value
+ * Returns: hms - formatted string
+ **/
+// char* seconds_to_time(float raw_seconds) {
+//  char *hms;
+//  int hours, hours_residue, minutes, seconds, milliseconds;
+//  hms = (char*) malloc(100);
+//
+//  //printf(hms, "%f", raw_seconds);
+//
+//  hours = (int) raw_seconds/3600;
+//  hours_residue = (int) raw_seconds % 3600;
+//  minutes = hours_residue/60;
+//  seconds = hours_residue % 60;
+//  milliseconds = 0;
+//
+//  // get the decimal part of raw_seconds to get milliseconds
+//  char *pos;
+//  pos = strchr(hms, '.');
+//  int ipos = (int) (pos - hms);
+//  char decimalpart[15];
+//  memset(decimalpart, ' ', sizeof(decimalpart));
+//  strncpy(decimalpart, &hms[ipos+1], 3);
+//  milliseconds = atoi(decimalpart);
+//
+//
+//  //printf(hms, "%d:%d:%d.%d", hours, minutes, seconds, milliseconds);
+//  return hms;
+//}
