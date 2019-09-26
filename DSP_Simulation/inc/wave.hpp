@@ -19,7 +19,28 @@ public:
 
 };
 
-struct s_header {
+class wave{
+	public:
+
+		long num_samples;
+		const char* input_file;
+		const char* output_file;
+		int read_wav(void);
+		int write_wav(void);
+		int init_container(void);
+		container* iodat = new container();
+};
+
+//int wave::init_container(void){
+//
+//
+//	container* iodat = new container();
+//	return 0;
+//}
+
+
+
+struct HEADER {
 	unsigned char riff[4];						// RIFF string
 	unsigned int overall_size	;				// overall size of file in bytes
 	unsigned char wave[4];						// WAVE string
@@ -35,22 +56,6 @@ struct s_header {
 	unsigned int data_size;						// NumSamples * NumChannels * BitsPerSample/8 - size of the next chunk that will be read
 };
 
-class wave{
-	public:
-
-		long num_samples;
-		const char* input_file;
-		const char* output_file;
-		int read_wav(void);
-		int write_wav(void);
-		int init_container(void);
-		container* iodat = new container();
-
-	private:
-
-		struct s_header header;
-
-};
 
 
 #endif /* WAVE_HPP */
