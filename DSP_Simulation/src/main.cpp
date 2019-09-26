@@ -25,7 +25,7 @@ int main(void) {
 
 	for(i=0;i<len_container;i++){
 //		printf("%d\n",waveinst.iodat->datin[i]);
-		waveinst.iodat->datout[i]=waveinst.iodat->datin[i]/3;
+		waveinst.iodat->datout[i]=waveinst.iodat->datin[i]/4;
 	}
 	waveinst.write_wav();
 
