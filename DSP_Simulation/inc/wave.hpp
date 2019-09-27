@@ -8,21 +8,21 @@
 #ifndef WAVE_HPP
 #define WAVE_HPP
 
-const unsigned len_container = 48000000;
+const unsigned len_container = 1000000;
 
 class container{
-public:
-	container(){};
-//	const unsigned long len_container=48000000;
-	int datin[len_container];
-	int datout[len_container];
+	public:
+		container(){};
+	//	const unsigned long len_container=48000000;
+		int datin[len_container];
+		int datout[len_container];
 
 };
 
 class wave{
 	public:
 
-		long num_samples;
+		unsigned long num_samples;
 		const char* input_file;
 		const char* output_file;
 		int read_wav(void);
@@ -30,15 +30,6 @@ class wave{
 		int init_container(void);
 		container* iodat = new container();
 };
-
-//int wave::init_container(void){
-//
-//
-//	container* iodat = new container();
-//	return 0;
-//}
-
-
 
 struct HEADER {
 	unsigned char riff[4];						// RIFF string

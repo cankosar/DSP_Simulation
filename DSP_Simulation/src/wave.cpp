@@ -156,7 +156,7 @@ int wave::read_wav(void) {
 	 // read each sample from data chunk if PCM
 	 if (header.format_type == 1) { // PCM
 
-			long i =0;
+			unsigned long i =0;
 			char data_buffer[size_of_each_sample];
 			int  size_is_correct = TRUE;
 
@@ -317,7 +317,7 @@ int wave::write_wav(void) {
 	fwrite(sizebuf, 4, 1, ptr);
 
 	//Write data buffer into the file
-	for(int i=1; i<=num_samples;i++){
+	for(unsigned i=1; i<=num_samples;i++){
 		buf[0]=(char)(iodat->datout[i]);
 		buf[1]=(char)(iodat->datout[i]>>8);
 		fwrite(buf, 2, 1, ptr);
