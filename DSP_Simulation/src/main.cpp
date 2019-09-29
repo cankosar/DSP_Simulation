@@ -4,9 +4,6 @@
 #include "../inc/main.hpp"
 #include "../inc/ser_deser.hpp"
 
-
-
-
 int main(void) {
 
 	//Create the instances

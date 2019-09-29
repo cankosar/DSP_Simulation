@@ -69,10 +69,18 @@ int ser_deser::process(void){
 	//Instance DSP
 	dsp inst_dsp;
 
+	//Initialize DSP
+	inst_dsp.init();
+
+	//Update parameter once
+	inst_dsp.update();
+
+	//Serialize
 	unsigned int i=0;
 	printf("Process main\n");
 	while(get_next_buffer()){
 
+//		for(i=0;i<1;i++){
 		for(i=0;i<buffer_size;i++){
 
 			dsp_buf[p_w][i]=inst_dsp.process(&dsp_buf[p_r][i]);
@@ -81,6 +89,9 @@ int ser_deser::process(void){
 		}
 		p_offset_o+=buffer_size;
 
+//		if(p_offset_o>1000){
+//			break;
+//		}
 	}
 
 	return 0;

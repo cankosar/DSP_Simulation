@@ -8,8 +8,7 @@
 #ifndef MAIN_HPP_
 #define MAIN_HPP_
 
-#define FS 48000
-#define PI 3.141592653589793238462643383279
+
 
 
 #endif /* MAIN_HPP_ */
