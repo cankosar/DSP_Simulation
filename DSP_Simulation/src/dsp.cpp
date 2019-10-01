@@ -39,6 +39,9 @@ void dsp::init(void){
 	//Initialize overdrive
 	inst_overdrive.init();
 
+	//Set status
+	status=1;
+
 }
 
 int dsp::process(int* x){
@@ -46,22 +49,34 @@ int dsp::process(int* x){
 	//Convert to float
 	float y=(float) *x;
 
-	//Pass through the EQ section
-	unsigned short i;
-	for(i=0;i<n_EQ;i++){
-		y=inst_biquad[i].process(y);
+	//Main routine: Check the status of the components and feed them
+	if(status){
+
+		//Pass through the EQ section
+		unsigned short i;
+		for(i=0;i<n_EQ;i++){
+			if(inst_biquad[i].status){
+				y=inst_biquad[i].process(y);
+			}
+		}
+
+		//Pass through delay
+		if(inst_delay.status){
+			y=inst_delay.process(y);
+		}
+
+		//Pass through chorus
+		if(inst_chorus.status){
+			y=inst_chorus.process(y);
+		}
+
+		//Pass through the overdrive
+		if(inst_overdrive.status){
+			y=inst_biquad[3].process(y);	//Pre filter
+			y=inst_overdrive.process(y);	//Overdrive
+			y=inst_biquad[4].process(y);	//Post filter
+		}
 	}
-
-	//Pass through delay
-	y=inst_delay.process(y);
-
-	//Pass through chorus
-	y=inst_chorus.process(y);
-
-	//Pass through the overdrive
-	y=inst_biquad[3].process(y);	//Pre filter
-	y=inst_overdrive.process(y);	//Overdrive
-	y=inst_biquad[4].process(y);	//Post filter
 
 	//Convert to int and return
 	return (int)y;
@@ -71,9 +86,25 @@ int dsp::process(int* x){
 void dsp::reset(void){
 
 
-	//Reset every bank
+	//This routine reset all the DSP functionalities
 
+	//Reset biquads
+	unsigned int i;
+	for(i=0;i<n_biquad;i++){
+		inst_biquad[i].reset();
+	}
 
+	//Reset delay
+	inst_delay.reset();
+
+	//Reset chorus
+	inst_chorus.reset();
+
+	//Reset overdrive
+	inst_overdrive.reset();
+
+	//Reset reverb
+	inst_reverb.reset();
 
 }
 
@@ -81,23 +112,85 @@ void dsp::update(void){
 
 	/*Here comes the update hash */
 
-	unsigned banks[]={1,0,0,0,1,1,0};
+	//Dummy hash
+//	unsigned banks[]={1,0,0,0,1,1,0};
+
+
+
+	unsigned banks=0b10000001;
+
 	//Check activations
 
 
 	//General DSP bank
-	if(banks[0]){		//Bank active
+	if(banks&(1<<c_dsp_bank)){		//Bank active
 		status=1;
-
 	}else{				//Bank inactive
 		if(status){		//If bank was active before
 			reset();
 		}
-
+		status=0;
 	}
 
 	//EQ banks
+	unsigned i;
+	for(i=0;i<n_EQ;i++){
+		//EQ banks
+		if(banks&(1<<(i+c_EQ_bank))){		//Bank active
+			inst_biquad[i].status=1;
+		}else{				//Bank inactive
+			if(inst_biquad[i].status){		//If bank was active before
+				inst_biquad[i].reset();
+			}
+			inst_biquad[i].status=0;
+		}
+	}
 
+	//Delay bank
+	if(banks&(1<<(c_delay_bank))){		//Bank active
+		inst_delay.status=1;
+	}else{								//Bank inactive
+		if(inst_delay.status){			//If bank was active before
+			inst_delay.reset();
+		}
+		inst_delay.status=0;
+	}
+
+	//Chorus bank
+	if(banks&(1<<(c_chorus_bank))){		//Bank active
+		inst_chorus.status=1;
+	}else{								//Bank inactive
+		if(inst_chorus.status){			//If bank was active before
+			inst_chorus.reset();
+		}
+		inst_chorus.status=0;
+	}
+
+	//Overdrive bank
+	if(banks&(1<<(c_overdrive_bank))){		//Bank active
+		inst_overdrive.status=1;
+		inst_biquad[c_overdrive_prefilter_id].status=1;
+		inst_biquad[c_overdrive_postfilter_id].status=1;
+	}else{										//Bank inactive
+		if(inst_overdrive.status){				//If bank was active before
+			inst_overdrive.reset();
+			inst_biquad[c_overdrive_prefilter_id].reset();
+			inst_biquad[c_overdrive_postfilter_id].reset();
+		}
+		inst_overdrive.status=0;
+		inst_biquad[c_overdrive_prefilter_id].status=0;
+		inst_biquad[c_overdrive_postfilter_id].status=0;
+	}
+
+	//Reverb bank
+	if(banks&(1<<(c_reverb_bank))){		//Bank active
+		inst_reverb.status=1;
+	}else{								//Bank inactive
+		if(inst_reverb.status){			//If bank was active before
+			inst_reverb.reset();
+		}
+		inst_reverb.status=0;
+	}
 
 
 }

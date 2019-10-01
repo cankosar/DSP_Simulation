@@ -22,6 +22,10 @@ class biquad{
 		bool status;
 
 	private:
+
+		//Methods
+		void reset_buffer(void);
+
 		//Variables
 		float y,y1,y2,x1,x2;
 		float param[5];

@@ -17,6 +17,7 @@ class delay{
 		void reset(void);
 		void update(float* param_arr);
 		float process(float x);
+		void reset_buffer(void);
 
 		//Variables
 		bool status;

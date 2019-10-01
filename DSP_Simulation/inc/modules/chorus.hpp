@@ -11,6 +11,7 @@
 class chorus{
 
 	public:
+
 		//Methods
 		void init(void);
 		void reset(void);
@@ -21,7 +22,9 @@ class chorus{
 		bool status;
 
 	private:
+
 		//Methods
+		void reset_buffer(void);
 		float get_current_delay(void);
 		float lfo(void);
 

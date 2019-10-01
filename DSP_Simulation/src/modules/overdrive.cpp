@@ -4,6 +4,7 @@
  *  Created on: 29.09.2019
  *      Author: Can
  */
+#include "stdio.h"
 #include "math.h"
 #include "../../inc/modules/overdrive.hpp"
 
@@ -16,12 +17,14 @@ void overdrive::init(void){
 	upscaler=1000;
 	downscaler=1/upscaler;
 
+	//Set status
+	status=1;
 
 }
 
 void overdrive::reset(void){
 
-
+	printf("Resetting overdrive\n");
 
 }
 

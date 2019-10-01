@@ -8,19 +8,29 @@
 #include "math.h"
 #include "../../inc/constants.hpp"
 #include "../../inc/modules/biquad.hpp"
+#include "stdio.h"
 
 
 void biquad::init(void){
 
-	x1=0;
-	x2=0;
-	y1=0;
-	y2=0;
-	y=0;
+	reset_buffer();
+	status=1;
 }
 
 void biquad::reset(void){
 
+	printf("Resetting biquad\n");
+	reset_buffer();
+
+}
+
+void biquad::reset_buffer(void){
+
+	//Reset memory
+	x1=0;
+	x2=0;
+	y1=0;
+	y2=0;
 
 }
 

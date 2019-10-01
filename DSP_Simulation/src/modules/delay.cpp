@@ -4,6 +4,8 @@
  *  Created on: 29.09.2019
  *      Author: Can
  */
+#include "stdio.h"
+#include "string.h"
 
 #include "../../inc/constants.hpp"
 #include "../../inc/modules/delay.hpp"
@@ -22,17 +24,30 @@ void delay::init(void){
 	dptr=0;
 
 	//Clean buffer
-	long unsigned i;
-	for(i=0;i<delay_len;i++){
-		dbuf[i]=0;
-	}
+	reset_buffer();
+
+	//Set status
+	status=1;
 
 }
 
 void delay::reset(){
 
+	printf("Resetting delay\n");
 
+	//Fill the delay buffer with zeros
+	reset_buffer();
 
+	//Reset pointers : Obsolete?
+//	dptr=0;
+
+}
+
+void delay::reset_buffer(void){
+	//Fill the delay buffer with zeros
+	//The size of the float is 4
+
+	memset(dbuf, 0, delay_len*sizeof(*dbuf));
 }
 
 void delay::update(float *param_arr){

@@ -8,6 +8,8 @@ int main(void) {
 
 	//Create the instances
 
+
+
 	printf("Creating instances\n");
 	ser_deser inst_ser;
 

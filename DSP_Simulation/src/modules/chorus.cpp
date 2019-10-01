@@ -5,11 +5,15 @@
  *      Author: Can
  */
 
+#include "stdio.h"
+#include "string.h"
 #include "math.h"
 #include "../../inc/constants.hpp"
 #include "../../inc/modules/chorus.hpp"
 
+
 void chorus::init(void){
+
 	//Chorus parameter
 	G_d=0.7; //Dry gain (Dry/Wet mix)
 	G_w=0.3; //Wet gain (Dry/Wet mix)
@@ -26,12 +30,35 @@ void chorus::init(void){
 	//Current angle of LFO
 	a_lfo=0;
 
+	//Resetting buffer
+	reset_buffer();
+
+	//Status set
+	status=1;
+
 }
 
 void chorus::reset(void){
 
+	//Resetting chorus
+	printf("Resetting chorus\n");
+
+	//Fill the delay buffer with zeros
+	reset_buffer();
+
+	//Reset pointers : Obsolete?
+//	dptr=0;
+
 
 }
+
+void chorus::reset_buffer(void){
+	//Fill the delay buffer with zeros
+	//The size of the float is 4
+
+	memset(cbuf, 0, chorus_len*sizeof(*cbuf));
+}
+
 void chorus::update(float* param_arr){
 
 
