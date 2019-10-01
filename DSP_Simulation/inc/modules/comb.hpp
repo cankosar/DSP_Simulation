@@ -10,6 +10,16 @@
 
 class comb{
 
+		public:
+		//Methods
+		void init(float* bufptr, unsigned bufsize);
+		void reset(void);
+		float process(float x);
+		void update(float* param_arr);
+
+		//Variables
+		bool status;
+
 	private:
 		//Methods
 		void reset_buffer(void);
@@ -23,18 +33,7 @@ class comb{
 		float *buffer;
 		unsigned long cptr;
 
-	public:
-		//Methods
-		comb(unsigned n){
-			bufsize=n;
-		};
-		void init(void);
-		void reset(void);
-		float process(float x);
-		void update(float* param_arr);
 
-		//Variables
-		bool status;
 
 
 

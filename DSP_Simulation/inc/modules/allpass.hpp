@@ -12,7 +12,7 @@ class allpass{
 
 	public:
 		//Methods
-		void init(void);
+		void init(float* bufptr, unsigned size);
 		void reset(void);
 		float process(float x);
 		void update(float* param_arr);
@@ -25,7 +25,12 @@ class allpass{
 		void reset_buffer(void);
 
 		//Variables
+		float feedback;
 
+		//Buffer
+		unsigned long bufsize;
+		float *buffer;
+		unsigned long aptr;
 
 };
 

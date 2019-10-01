@@ -39,6 +39,9 @@ void dsp::init(void){
 	//Initialize overdrive
 	inst_overdrive.init();
 
+	//Initialize reverb
+	inst_reverb.init();
+
 	//Set status
 	status=1;
 
@@ -75,6 +78,11 @@ int dsp::process(int* x){
 			y=inst_biquad[3].process(y);	//Pre filter
 			y=inst_overdrive.process(y);	//Overdrive
 			y=inst_biquad[4].process(y);	//Post filter
+		}
+
+		//Pass through reverb
+		if(inst_reverb.status){
+			y=inst_reverb.process(y);
 		}
 	}
 
