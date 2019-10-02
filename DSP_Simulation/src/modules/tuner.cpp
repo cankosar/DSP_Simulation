@@ -6,18 +6,14 @@
  */
 #include "stdio.h"
 #include "math.h"
+#include "string.h"
 #include "../../inc/modules/tuner.hpp"
 #include "../../inc/constants.hpp"
 
-
-
-
 void tuner::init(void){
 
-	//Reset the pointer
-	tptr=0;
-	maptr=0;
-
+	//Reset buffer
+	reset();
 
 	//Set status
 	status=1;
@@ -25,6 +21,28 @@ void tuner::init(void){
 }
 
 void tuner::reset(void){
+
+	//Reset buffer
+	reset_buffer();
+
+	//Reset the pointer
+	tptr=0;
+	maptr=0;
+
+	last_conf_f=0;
+	last_conf_t=0;
+
+
+}
+
+void tuner::reset_buffer(void){
+
+	//Reset the main buffer
+	memset(buffer, 0, bufsize*sizeof(*buffer));
+
+	//Reset moving average buffer
+	memset(buf_maf, 0, l_maf*sizeof(*buf_maf));
+
 
 }
 
@@ -55,47 +73,24 @@ void tuner::detect_pitch(void){
 
 	//Declare and initialize variables
 	unsigned long i=0;
-//	float freq;
-
-
-//	printf("dp\n");
-
-//	printf("Dist:%d, AC:%d\n",p2,sizeof(note_bins)/4);
-
 
 	//Auto-correlation algorithm for the first iteration
 	for(i=0; i<s_bins;i++){
 		//Calculate auto-correlation normalized score
-//		printf("Bin:%d\n",note_bins[i]);
 		arr_ac[i]=calc_ac(note_bins[i]);
-//		printf("%d: %d, %f\n",i, note_bins[i],arr_ac[i]);
 	}
 
 	//Find the major peaks of the first iteration
 	find_peaks();
-//	printf("f_M1: %fHz [%d] \t f_M2 :%f[%d]\n",((double)FS/(double)note_bins[p1]),p1,((double)FS/(double)note_bins[p2]),p2);
 
-	//Find the exact distance
-
-	//Find the exact lower frequency
-
-//	printf("Dist:%d, AC:%d\n",p2,s_bins);
 	if(note_bins[p1]>note_bins[p2]){
 		p=get_exact_peak_linear(p1);
 	}else{
 		p=get_exact_peak_linear(p2);
 	}
 
-//	printf("Peak: %f [Distance: %d]\n",  (double)FS/(double)p,p);
-
-//	printf("Peaks: %d,%d\n", (int32_t)FS/arr_ac[peaks.p1],(int32_t) (FS/arr_ac[peaks.p2]));
-//	printf("Peaks: %f,%f\n", (float)FS/p1,(float)FS/p2);
-
-	//freq=estimate_freq(p);
+	//Filter output and estimate frequency
 	estimate_freq();
-////	printf("Freq: %f\n",ctrl_tx[tuner_freq_reg].f32);
-//	printf("Freq: %d\n",(int32_t)ctrl_tx[tuner_freq_reg].f32);
-
 }
 
 
@@ -137,8 +132,6 @@ void tuner::find_peaks(void){
 	//Finding the peaks
 	n_peak=0;											//Number of found peaks
 		for(i=1; i<s_bins-1;i++){
-//			fprintf(fptr, "%f,%f\n",(float)(FS/note_bins[i]),arr_ac[i]);
-	//		printf("%f,%f\n",(float)(FS/note_bins[i]),arr_ac[i]);
 			if(arr_ac[i]>0){								//Find only positive peaks
 				if(arr_ac[i]>arr_ac[i-1] && arr_ac[i]>arr_ac[i+1]){	//Peak found
 //					printf("Peak found:%f \t%f\n",(float)(FS/note_bins[i]),arr_ac[i]);
@@ -207,12 +200,6 @@ unsigned tuner::get_exact_peak_linear(unsigned index){
 		}
 
 	}
-
-//	printf("AC-Prev:%.5f \tAC:%.5f \tAC-Next:%.5f \n",ac_prev,ac,ac_next);
-//	printf("Found: %f \t Iterations:%d\n", (float)FS/dist,n);
-
-
-
 	return dist;
 }
 
@@ -268,25 +255,21 @@ void tuner::estimate_freq(void){
 
 	//Deviation
 	deviation=maximum/minimum;
-//	printf("ma:%f \t max: %f \t min: %f \t dev: %f \n",ma, maximum, minimum, deviation);
 
 	//Check if deviation is within the tolerance band
 	if(deviation<=devtol){		//Note confidence good=>Everything fine
 		last_conf_f=ma;
 
 //		last_conf_t=HAL_GetTick(); //Commented out for Win
-//		printf("Set up t:%lu \n",last_conf_t);
 		fc=ma;
 
 	}else{												//Note confidence bad => Set a timer
 //		if((HAL_GetTick()-last_conf_t)<conf_timeout){ //Commented out for Win
 		if(1){
-//			printf("Holding t:%lu \t LC:%lu\n",HAL_GetTick(),last_conf_t);
 			fc=last_conf_f;
 
 		}else{
 			//Timeout
-//			printf("Timeout t:%lu \t LC:%lu\n",HAL_GetTick(),last_conf_t);
 			last_conf_f=0;
 			last_conf_t=0;
 			fc=0;

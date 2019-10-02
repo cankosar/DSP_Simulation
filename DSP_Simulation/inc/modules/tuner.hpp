@@ -27,6 +27,7 @@ class tuner{
 		void find_peaks(void);
 		unsigned get_exact_peak_linear(unsigned dist);
 		void estimate_freq(void);
+		void reset_buffer(void);
 
 		//Variables
 		unsigned long tptr;
@@ -54,7 +55,7 @@ class tuner{
 		//Predictive filter
 		float last_conf_f;
 		unsigned long last_conf_t;
-		unsigned long conf_timeout;
+		unsigned long conf_timeout=500;		//Timeout in ms
 		//Current estimated frequencies
 		float fc;
 };
