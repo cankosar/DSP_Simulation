@@ -45,6 +45,9 @@ void dsp::init(void){
 	//Initialize tuner
 	inst_tuner.init();
 
+	//Initialize tremolo
+	inst_tremolo.init();
+
 	//Set status
 	status=1;
 
@@ -76,6 +79,10 @@ int dsp::process(int* x){
 			y=inst_chorus.process(y);
 		}
 
+		//Pass through tremolo
+		if(inst_tremolo.status){
+			y=inst_tremolo.process(y);
+		}
 		//Pass through the overdrive
 		if(inst_overdrive.status){
 			y=inst_biquad[3].process(y);	//Pre filter
@@ -128,7 +135,7 @@ void dsp::update(void){
 	/*Here comes the update hash */
 
 	//Dummy hash
-	unsigned banks=0b100000001;
+	unsigned banks=0b1000000001;
 
 	//General DSP bank
 	if(banks&(1<<c_dsp_bank)){		//Bank active
@@ -229,6 +236,16 @@ void dsp::update(void){
 			inst_reverb.reset();
 		}
 		inst_reverb.status=0;
+	}
+
+	//Reverb bank
+	if(banks&(1<<(c_tremolo_bank))){		//Bank active
+		inst_tremolo.status=1;
+	}else{								//Bank inactive
+		if(inst_tremolo.status){			//If bank was active before
+			inst_tremolo.reset();
+		}
+		inst_tremolo.status=0;
 	}
 
 
