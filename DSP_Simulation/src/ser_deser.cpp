@@ -16,14 +16,7 @@ int ser_deser::init(void){
 	p_offset=0;
 	p_offset_o=0;
 
-	//Set the input&output files
-	inst_wav.input_file= "samples/Guitar_Rythm_dry_16bit_mono.wav";
-	inst_wav.output_file= "samples/Guitar_Rythm_16bit_processed.wav";
-
-	//Read wave file
-	inst_wav.read_wav();
-
-//	printf("Num samples %d",inst_wav.num_samples);
+	//	printf("Num samples %d",inst_wav.num_samples);
 	//Set pointers
 	p_r=0;
 	p_w=1;
