@@ -62,7 +62,7 @@ float allpass::process(float x){
 
 	bufout = buffer[aptr];
 //	printf("aptr=%d\n",aptr);
-	undenormalise(bufout);
+//	undenormalise(bufout);
 
 //	y = -x + bufout;
 //	buffer[aptr] = x + (bufout*feedback);
