@@ -14,17 +14,6 @@
 
 void reverb::init(void){
 
-	printf("Init reverb\n");
-
-	//Init array
-
-//	unsigned i;
-//
-//	for(i=0;i<sbuf_comb_1;i++){
-//		bufcomb1[i]=i*2;
-//	}
-
-
 	//Initialize comb filters
 	inst_comb[0].init(bufcomb1,sbuf_comb_1);
 	inst_comb[1].init(bufcomb2,sbuf_comb_2);
@@ -42,38 +31,59 @@ void reverb::init(void){
 	inst_allpass[2].init(bufap1,sbuf_ap_3);
 	inst_allpass[3].init(bufap1,sbuf_ap_4);
 
-
-
-
 	//Resetting buffer
-	reset_buffer();
+	reset();
 
 	//Status set
 	status=1;
 
+	//Set initial parameters
+	float paramhash[]={initialdry,initialwet,initialroom,initialdamp};
+	update(paramhash);
 }
 
 void reverb::reset(void){
-
-	//Resetting chorus
-	printf("Resetting reverb\n");
-
 	//Fill the delay buffer with zeros
 	reset_buffer();
-
 }
 
 void reverb::reset_buffer(void){
-	//Fill the delay buffer with zeros
-	//The size of the float is 4
 
-//	memset(cbuf, 0, chorus_len*sizeof(*cbuf));
+	//Fill the delay buffer with zeros
+	unsigned i;
+	for(i=0;i<n_comb;i++){
+		inst_comb[i].reset();
+	}
+
+	//Update the parameter of allpass filters (Pointer on 2nd element: Roomsize)
+	for(i=0;i<n_allpass;i++){
+		inst_allpass[i].reset();
+	}
+
 }
 
 void reverb::update(float* param_arr){
 
+	//Update the dry&wet mix
+	drymix=param_arr[0];
+	wetmix=param_arr[1];
 
+	//Scale and set feedback parameter
+	float feedback=(param_arr[2]*scaleroom) + offsetroom;
 
+	//Scale and set damp
+	float damp=scaledamp*param_arr[3];
+
+	//Update the parameter of comb filters (Pointer on 2nd element: Roomsize)
+	unsigned i;
+	for(i=0;i<n_comb;i++){
+		inst_comb[i].update(feedback,damp);
+	}
+
+	//Update the parameter of allpass filters (Pointer on 2nd element: Roomsize)
+	for(i=0;i<n_allpass;i++){
+		inst_allpass[i].update(feedback);
+	}
 }
 
 
@@ -82,24 +92,19 @@ float reverb::process(float x){
 	float y;
 	y=0;
 
-//	//Attenuate input, because 8 filters in parallel
-	x=x*fixedgain;
-
+	//Feed the parallel comb filters
 	unsigned i;
 	for(i=0;i<n_comb;i++){
 		y+=inst_comb[i].process(x);
 	}
 
-//	y=x;
-
+	//Pass through the serial allpass filters
 	for(i=0;i<n_allpass;i++){
 		y=inst_allpass[i].process(y);
 	}
 
-//	y=inst_allpass[0].process(y);
-//
-//	y=inst_allpass[1].process(y);
-
+	//Attenuate output and mix wet& dry
+	y=y*fixedgain*wetmix+x*drymix;
 
 	return y;
 }

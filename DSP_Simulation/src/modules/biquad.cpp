@@ -19,9 +19,8 @@ void biquad::init(void){
 
 void biquad::reset(void){
 
-	printf("Resetting biquad\n");
+	//Reset the buffer
 	reset_buffer();
-
 }
 
 void biquad::reset_buffer(void){

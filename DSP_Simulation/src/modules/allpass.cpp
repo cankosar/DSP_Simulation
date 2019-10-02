@@ -6,7 +6,7 @@
  */
 
 #include "stdio.h"
-//#include "string.h"
+#include "string.h"
 //#include "math.h"
 //#include "../../inc/constants.hpp"
 #include "../../inc/modules/allpass.hpp"
@@ -25,10 +25,6 @@ void allpass::init(float* bufptr, unsigned size){
 	//Resetting buffer
 	reset_buffer();
 
-	float inithash[]={0.999};
-	update(inithash);
-
-	printf("Feedback:%f\n",feedback);
 	//Status set
 	status=1;
 
@@ -36,29 +32,25 @@ void allpass::init(float* bufptr, unsigned size){
 
 void allpass::reset(void){
 
-	//Resetting chorus
-//	printf("Resetting reverb\n");
-
 	//Fill the delay buffer with zeros
 	reset_buffer();
 
 }
 
 void allpass::reset_buffer(void){
+
 	//Fill the delay buffer with zeros
-	//The size of the float is 4
+	memset(buffer, 0, bufsize*sizeof(*buffer));
 
-//	memset(cbuf, 0, chorus_len*sizeof(*cbuf));
-
-	unsigned i;
-	for(i=0;i<bufsize;i++){
-		buffer[i]=0;
-	}
+//	unsigned i;
+//	for(i=0;i<bufsize;i++){
+//		buffer[i]=0;
+//	}
 }
 
-void allpass::update(float* param_arr){
+void allpass::update(float feedback_in){
 
-	feedback=param_arr[0];
+	feedback=feedback_in;
 
 }
 

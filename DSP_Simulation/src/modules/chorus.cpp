@@ -40,15 +40,8 @@ void chorus::init(void){
 
 void chorus::reset(void){
 
-	//Resetting chorus
-	printf("Resetting chorus\n");
-
 	//Fill the delay buffer with zeros
 	reset_buffer();
-
-	//Reset pointers : Obsolete?
-//	dptr=0;
-
 
 }
 

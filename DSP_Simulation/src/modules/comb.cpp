@@ -25,28 +25,6 @@ void comb::init(float* bufptr, unsigned size){
 
 	//Resetting buffer
 	reset_buffer();
-//	float inithash[]={initialroom,initialdamp};
-	float inithash[]={0.99,0.8};
-	update(inithash);
-
-//	printf("Feedback:%f, Damp1:%f, Damp2:%f\n",feedback,damp1,damp2);
-//	printf("Buffer Start: %#X with length:%d\n",&buffer,bufsize);
-//	unsigned i;
-//	for(i=0;i<bufsize;i++){
-//		printf("%d:%.0f\n",i,buffer[i]);
-//	}
-
-
-
-
-//	printf("Feedback:%f, Damp1:%f, Damp2:%f\n",feedback,damp1,damp2);
-//	printf("Size:%d\n",bufsize);
-//	unsigned i;
-//	for(i=0;i<bufsize;i++){
-//		printf("%d:%.0f\n",i,buffer[i]);
-//	}
-//
-
 
 	//Status set
 	status=1;
@@ -55,33 +33,31 @@ void comb::init(float* bufptr, unsigned size){
 
 void comb::reset(void){
 
-	//Resetting chorus
-//	printf("Resetting reverb\n");
-
 	//Fill the delay buffer with zeros
 	reset_buffer();
 
 }
 
 void comb::reset_buffer(void){
+
 	//Fill the delay buffer with zeros
-	//The size of the float is 4
+	memset(buffer, 0, bufsize*sizeof(*buffer));
 
-//	printf("Sizeofbuf:%d\n",bufsize*sizeof(*buffer));
-//	memset(buffer, (float)3, bufsize*4);
-
-	unsigned i;
-	for(i=0;i<bufsize;i++){
-		buffer[i]=0;
-	}
+//	unsigned i;
+//	for(i=0;i<bufsize;i++){
+//		buffer[i]=0;
+//	}
 }
 
-void comb::update(float* param_arr){
+void comb::update(float feedback_in, float damp){
 
-
-	damp1=param_arr[0];
+	//Scale and set damp
+	damp1=damp;
+	//Helping variable damp2
 	damp2=1-damp1;
-	feedback=param_arr[1];
+
+	//Scale and set feedback parameter
+	feedback=(feedback_in*scaleroom) + offsetroom;
 
 }
 

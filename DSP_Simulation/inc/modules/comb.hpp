@@ -15,7 +15,7 @@ class comb{
 		void init(float* bufptr, unsigned bufsize);
 		void reset(void);
 		float process(float x);
-		void update(float* param_arr);
+		void update(float feedback, float damp);
 
 		//Variables
 		bool status;
@@ -32,11 +32,6 @@ class comb{
 		unsigned long bufsize;
 		float *buffer;
 		unsigned long cptr;
-
-
-
-
-
 
 };
 

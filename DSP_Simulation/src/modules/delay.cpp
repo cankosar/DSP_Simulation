@@ -13,10 +13,10 @@
 void delay::init(void){
 
 	//Dummy delay parameter
-	G_fb=0.2; //Feedback gain
+	G_fb=0.3; //Feedback gain
 	G_d=1; //Dry gain (Dry/Wet mix)
-	G_w=0.0; //Wet gain (Dry/Wet mix)
-	delay_time=0.6; //Delay time in seconds
+	G_w=0.2; //Wet gain (Dry/Wet mix)
+	delay_time=0.5; //Delay time in seconds
 
 	n_distance=delay_time*FS;
 
@@ -33,19 +33,13 @@ void delay::init(void){
 
 void delay::reset(){
 
-	printf("Resetting delay\n");
-
 	//Fill the delay buffer with zeros
 	reset_buffer();
-
-	//Reset pointers : Obsolete?
-//	dptr=0;
 
 }
 
 void delay::reset_buffer(void){
 	//Fill the delay buffer with zeros
-	//The size of the float is 4
 
 	memset(dbuf, 0, delay_len*sizeof(*dbuf));
 }

@@ -77,14 +77,13 @@ int ser_deser::process(void){
 
 	//Serialize
 	unsigned int i=0;
-	printf("Process main\n");
+
 	while(get_next_buffer()){
 
 //		for(i=0;i<1;i++){
 		for(i=0;i<buffer_size;i++){
 
 			dsp_buf[p_w][i]=inst_dsp.process(&dsp_buf[p_r][i]);
-//			printf("%d:%d \t\t  %d=>%d\n",p_offset_o+i,inst_wav.iodat->datin[p_offset_o+i],dsp_buf[p_r][i],dsp_buf[p_w][i]);
 			inst_wav.iodat->datout[p_offset_o+i]=dsp_buf[p_w][i];
 		}
 		p_offset_o+=buffer_size;

@@ -15,7 +15,7 @@ class allpass{
 		void init(float* bufptr, unsigned size);
 		void reset(void);
 		float process(float x);
-		void update(float* param_arr);
+		void update(float feedback);
 
 		//Variables
 		bool status;

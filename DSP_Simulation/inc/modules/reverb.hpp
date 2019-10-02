@@ -49,6 +49,12 @@ class reverb{
 		comb inst_comb[n_comb];
 		allpass inst_allpass[n_allpass];
 
+		//Parameter
+		float drymix;
+		float wetmix;
+		float roomsize;
+		float damp;
+
 };
 
 

@@ -24,13 +24,9 @@ void overdrive::init(void){
 
 void overdrive::reset(void){
 
-	printf("Resetting overdrive\n");
-
 }
 
 void overdrive::update(float *param_arr){
-
-
 
 }
 
