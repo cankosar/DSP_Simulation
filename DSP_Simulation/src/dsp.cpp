@@ -42,6 +42,9 @@ void dsp::init(void){
 	//Initialize reverb
 	inst_reverb.init();
 
+	//Initialize tuner
+	inst_tuner.init();
+
 	//Set status
 	status=1;
 
@@ -86,6 +89,10 @@ int dsp::process(int* x){
 		}
 	}
 
+	if(inst_tuner.status){
+		inst_tuner.process(y);
+	}
+
 	//Convert to int and return
 	return (int)y;
 
@@ -121,17 +128,48 @@ void dsp::update(void){
 	/*Here comes the update hash */
 
 	//Dummy hash
-	unsigned banks=0b10000001;
+	unsigned banks=0b100000001;
 
 	//General DSP bank
 	if(banks&(1<<c_dsp_bank)){		//Bank active
 		status=1;
-	}else{				//Bank inactive
-		if(status){		//If bank was active before
+	}else{							//Bank inactive
+		if(status){					//If bank was active before
 			reset();
 		}
 		status=0;
 	}
+
+	bool dsp_state_store=0;
+	//Tuner bank
+	if(banks&(1<<c_tuner_bank)){		//Bank active
+
+		//Store DSP state while entering tuner mode
+		dsp_state_store=status;
+
+		//Deactivate DSP bank
+		status=0;
+
+		//Reset all banks
+		reset();
+
+		//Activate tuner bank
+		inst_tuner.status=1;
+
+	}else{							//Bank inactive
+
+		//Deactivate tuner
+		inst_tuner.status=0;
+		if(inst_tuner.status){					//If bank was active before
+			inst_tuner.reset();
+		}
+
+		//Restore old dsp status
+		inst_tuner.status=dsp_state_store;
+	}
+
+
+
 
 	//EQ banks
 	unsigned i;
@@ -139,7 +177,7 @@ void dsp::update(void){
 		//EQ banks
 		if(banks&(1<<(i+c_EQ_bank))){		//Bank active
 			inst_biquad[i].status=1;
-		}else{				//Bank inactive
+		}else{								//Bank inactive
 			if(inst_biquad[i].status){		//If bank was active before
 				inst_biquad[i].reset();
 			}

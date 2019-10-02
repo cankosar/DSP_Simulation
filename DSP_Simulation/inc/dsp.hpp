@@ -13,6 +13,7 @@
 #include "../inc/modules/chorus.hpp"
 #include "../inc/modules/overdrive.hpp"
 #include "../inc/modules/reverb.hpp"
+#include "../inc/modules/tuner.hpp"
 
 class dsp{
 	public:
@@ -27,13 +28,15 @@ class dsp{
 
 		//The bank positions
 		static const unsigned short c_dsp_bank=0;
-		static const unsigned short c_EQ_bank=1;
-		static const unsigned short c_delay_bank=4;
-		static const unsigned short c_chorus_bank=5;
-		static const unsigned short c_overdrive_bank=6;
+		static const unsigned short c_tuner_bank=1;
+		static const unsigned short c_EQ_bank=2;
+		static const unsigned short c_delay_bank=5;
+		static const unsigned short c_chorus_bank=6;
+		static const unsigned short c_overdrive_bank=7;
+		static const unsigned short c_reverb_bank=8;
+
 		static const unsigned short c_overdrive_prefilter_id=3;
 		static const unsigned short c_overdrive_postfilter_id=4;
-		static const unsigned short c_reverb_bank=7;
 
 	private:
 		const static unsigned short int n_biquad=5;
@@ -43,6 +46,7 @@ class dsp{
 		chorus inst_chorus;
 		overdrive inst_overdrive;
 		reverb inst_reverb;
+		tuner inst_tuner;
 };
 
 

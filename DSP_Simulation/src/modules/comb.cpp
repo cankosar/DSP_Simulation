@@ -67,10 +67,10 @@ float comb::process(float x){
 	float y;
 
 	y = buffer[cptr];
-	undenormalise(y);
+//	undenormalise(y);
 
 	filterstore = (y*damp2) + (filterstore*damp1);
-	undenormalise(filterstore);
+//	undenormalise(filterstore);
 
 	buffer[cptr] = x + (filterstore*feedback);
 
