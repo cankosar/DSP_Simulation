@@ -15,17 +15,17 @@
 void chorus::init(void){
 
 	//Chorus parameter
-	G_d=0.7; //Dry gain (Dry/Wet mix)
+	G_d=0.9; //Dry gain (Dry/Wet mix)
 	G_w=0.3; //Wet gain (Dry/Wet mix)
-	depth=20; //Depth
-	d_base=25;	//Base delay in ms
-	rate=8;
+	depth=2; //Depth
+	d_base=10;	//Base delay in ms
+	rate=1;
 
 	//Chorus pointer
 	cptr=0;
 
 	//Angle step
-	a_step=(2*PI)/(FS*rate);
+	a_step=(rate*2*PI)/(FS);
 
 	//Current angle of LFO
 	a_lfo=0;
@@ -71,7 +71,7 @@ float chorus::process(float x){
 	//Calculate the position of the pointer
 	int wptr;
 
-	wptr=cptr-(unsigned int)(t_c*FSms);
+	wptr=cptr-lrint(t_c*FSms);
 
 	if(wptr<0){
 		wptr+=chorus_len;

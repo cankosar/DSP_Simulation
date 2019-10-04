@@ -149,7 +149,7 @@ void dsp::update(void){
 	/*Here comes the update hash */
 
 	//Dummy hash
-	unsigned banks=0b10000000001;
+	unsigned banks=0b00001000001;
 
 	//General DSP bank
 	if(banks&(1<<c_dsp_bank)){		//Bank active
