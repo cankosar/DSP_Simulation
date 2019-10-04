@@ -18,7 +18,7 @@ void chorus::init(void){
 	G_d=0.9; //Dry gain (Dry/Wet mix)
 	G_w=0.3; //Wet gain (Dry/Wet mix)
 	depth=2; //Depth
-	d_base=10;	//Base delay in ms
+	d_base=10;	//Base delay in ms /Max 25
 	rate=1;
 
 	//Chorus pointer

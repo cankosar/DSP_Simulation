@@ -36,7 +36,7 @@ class chorus{
 		float rate;			//Rate
 
 		//Chorus buffer
-		static const unsigned chorus_len=4800;
+		static const unsigned chorus_len=1200;
 		float* cbuf = new float[chorus_len];
 		unsigned cptr;
 

@@ -34,7 +34,7 @@ class rotary{
 		float rate;			//Rate
 
 		//Chorus buffer
-		static const unsigned rotary_len=4800;
+		static const unsigned rotary_len=1200;
 		float* rbuf = new float[rotary_len];
 		unsigned rptr;
 

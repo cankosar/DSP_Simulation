@@ -17,7 +17,7 @@ void rotary::init(void){
 	//Chorus parameter
 	depth=0.5; //Depth
 	d_base=5;	//Base delay in ms
-	rate=5;
+	rate=5;		//Max. 25
 
 	//Chorus pointer
 	rptr=0;
