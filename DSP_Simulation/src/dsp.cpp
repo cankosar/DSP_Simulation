@@ -48,6 +48,9 @@ void dsp::init(void){
 	//Initialize tremolo
 	inst_tremolo.init();
 
+	//Initialize rotary
+	inst_rotary.init();
+
 	//Set status
 	status=1;
 
@@ -77,6 +80,11 @@ int dsp::process(int* x){
 		//Pass through chorus
 		if(inst_chorus.status){
 			y=inst_chorus.process(y);
+		}
+
+		//Pass through rotary
+		if(inst_rotary.status){
+			y=inst_rotary.process(y);
 		}
 
 		//Pass through tremolo
@@ -128,6 +136,12 @@ void dsp::reset(void){
 	//Reset reverb
 	inst_reverb.reset();
 
+	//Reset tremolo
+	inst_tremolo.reset();
+
+	//Reset rotary
+	inst_rotary.reset();
+
 }
 
 void dsp::update(void){
@@ -135,7 +149,7 @@ void dsp::update(void){
 	/*Here comes the update hash */
 
 	//Dummy hash
-	unsigned banks=0b1000000001;
+	unsigned banks=0b10000000001;
 
 	//General DSP bank
 	if(banks&(1<<c_dsp_bank)){		//Bank active
@@ -238,7 +252,7 @@ void dsp::update(void){
 		inst_reverb.status=0;
 	}
 
-	//Reverb bank
+	//Tremolo bank
 	if(banks&(1<<(c_tremolo_bank))){		//Bank active
 		inst_tremolo.status=1;
 	}else{								//Bank inactive
@@ -248,5 +262,14 @@ void dsp::update(void){
 		inst_tremolo.status=0;
 	}
 
+	//Rotary bank
+	if(banks&(1<<(c_rotary_bank))){		//Bank active
+		inst_rotary.status=1;
+	}else{								//Bank inactive
+		if(inst_rotary.status){			//If bank was active before
+			inst_rotary.reset();
+		}
+		inst_rotary.status=0;
+	}
 
 }
