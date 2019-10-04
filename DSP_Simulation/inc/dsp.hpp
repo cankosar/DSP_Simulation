@@ -16,6 +16,7 @@
 #include "../inc/modules/tuner.hpp"
 #include "../inc/modules/tremolo.hpp"
 #include "../inc/modules/rotary.hpp"
+#include "../inc/modules/compressor.hpp"
 
 class dsp{
 	public:
@@ -38,6 +39,7 @@ class dsp{
 		static const unsigned short c_reverb_bank=8;
 		static const unsigned short c_tremolo_bank=9;
 		static const unsigned short c_rotary_bank=10;
+		static const unsigned short c_compressor_bank=11;
 
 		static const unsigned short c_overdrive_prefilter_id=3;
 		static const unsigned short c_overdrive_postfilter_id=4;
@@ -53,6 +55,7 @@ class dsp{
 		tuner inst_tuner;
 		tremolo inst_tremolo;
 		rotary inst_rotary;
+		compressor inst_compressor;
 };
 
 

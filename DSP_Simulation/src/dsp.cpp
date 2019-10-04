@@ -51,6 +51,9 @@ void dsp::init(void){
 	//Initialize rotary
 	inst_rotary.init();
 
+	//Initialize rotary
+	inst_compressor.init();
+
 	//Set status
 	status=1;
 
@@ -63,6 +66,11 @@ int dsp::process(int* x){
 
 	//Main routine: Check the status of the components and feed them
 	if(status){
+
+		//Pass through compressor
+		if(inst_compressor.status){
+			y=inst_compressor.process(y);
+		}
 
 		//Pass through the EQ section
 		unsigned short i;
@@ -149,7 +157,7 @@ void dsp::update(void){
 	/*Here comes the update hash */
 
 	//Dummy hash
-	unsigned banks=0b00001000001;
+	unsigned banks=0b100000000001;
 
 	//General DSP bank
 	if(banks&(1<<c_dsp_bank)){		//Bank active
@@ -272,4 +280,13 @@ void dsp::update(void){
 		inst_rotary.status=0;
 	}
 
+	//Compressor bank
+	if(banks&(1<<(c_compressor_bank))){		//Bank active
+		inst_compressor.status=1;
+	}else{								//Bank inactive
+		if(inst_compressor.status){			//If bank was active before
+			inst_compressor.reset();
+		}
+		inst_compressor.status=0;
+	}
 }
