@@ -20,13 +20,13 @@ void compressor::init(void){
 	rptr=0;
 
 	//Init parameter
-	input_gain=4;
-	output_gain=0.5;
-	threshold=2000;
-	ratio=2;
+	input_gain=2;
+	output_gain=1;
+	threshold=1500;
+	ratio=4;
 	t_attack=10;	//In ms
-	t_release=10;	//In ms
-	t_rms=5;		//In ms
+	t_release=200;	//In ms
+	t_rms=25;		//In ms
 	limit_gain=1/ratio;
 
 
@@ -138,15 +138,22 @@ float compressor::process(float x){
 		}else{
 			comp_gain=1;
 		}
-
-
 	}
 
-	if(comp_gain!=1){
-//		printf("G=%f\n",comp_gain);
-	}
 
-	y=comp_gain*x*output_gain;
+//	comp_gain=0.5;
+
+//	if(x>=0){
+//		y=threshold+(x-threshold)*comp_gain;
+//	}else{
+//		y=-1*threshold+(x+threshold)*comp_gain;
+//	}
+
+	y=x*comp_gain*output_gain;
+
+//	if(comp_gain!=1){
+//		printf("x:%f, y:%f, \tG=%f \t RMS: %f\n",x,y,comp_gain,c_rms);
+//	}
 
 	return y;
 //	return 0;
