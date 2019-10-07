@@ -16,6 +16,7 @@ class compressor{
 		void init(void);
 		void reset(void);
 		float process(float x);
+		float process_lg(float x);
 		void update(float* update_params);
 		float fast_sqroot(float x);
 
@@ -26,6 +27,7 @@ class compressor{
 		float input_gain;
 		float output_gain;
 		float ratio;
+		float slope;
 		float threshold;
 		float t_attack;
 		float t_release;
@@ -37,7 +39,7 @@ class compressor{
 		void reset_buffer(void);
 
 		//Parameter
-		float comp_gain;
+		float comp_gain, target_gain;
 		float limit_gain;
 		unsigned long i_attack,i_release;
 		float stepsize_attack,stepsize_release;
@@ -51,13 +53,17 @@ class compressor{
 		unsigned update_rate;
 		unsigned i_update;
 
-
-		//Chorus buffer
+		//Compressor buffer
 		static const unsigned rms_max=1200;
 		float* rmsbuf = new float[rms_max];
 		unsigned rptr;
 
-
+		//Main buffer
+		float t_main;
+		unsigned long delay_len;
+		static const unsigned buf_max=1200; 	//25ms
+		float* buf = new float[buf_max];
+		unsigned ptr;
 };
 
 

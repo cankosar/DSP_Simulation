@@ -69,7 +69,7 @@ int dsp::process(int* x){
 
 		//Pass through compressor
 		if(inst_compressor.status){
-			y=inst_compressor.process(y);
+			y=inst_compressor.process_lg(y);
 		}
 
 		//Pass through the EQ section
