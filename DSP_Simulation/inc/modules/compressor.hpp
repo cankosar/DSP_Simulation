@@ -18,8 +18,75 @@ class compressor{
 		float process(float x);
 		float process_lg(float x);
 		void update(float* update_params);
-		float fast_sqroot(float x);
+		double natlogof2;
+		inline float fast_log2 (float val)
+		{
+		   int * const    exp_ptr = reinterpret_cast <int *> (&val);
+		   int            x = *exp_ptr;
+		   const int      log_2 = ((x >> 23) & 255) - 128;
+		   x &= ~(255 << 23);
+		   x += 127 << 23;
+		   *exp_ptr = x;
 
+		   val = ((-1.0f/3) * val + 2) * val - 2.0f/3;   // (1)
+
+		   return (val + log_2);
+		};
+
+		inline float fast_sqroot(float number){
+
+			    const float threehalfs = 1.5F;
+
+			    float x2 = number * 0.5F;
+			    float y = number;
+
+			    // evil floating point bit level hacking
+			    long i = * ( long * ) &y;
+
+			    // value is pre-assumed
+			    i = 0x5f3759df - ( i >> 1 );
+			    y = * ( float * ) &i;
+
+			    // 1st iteration
+			    y = y * ( threehalfs - ( x2 * y * y ) );
+
+			    // 2nd iteration, this can be removed
+			    // y = y * ( threehalfs - ( x2 * y * y ) );
+
+
+			return y*number;
+		//	return 0;
+		};
+
+		inline double fastPow(double a, double b) {
+		    union {
+		        double d;
+		        int x[2];
+		    } u = { a };
+		    u.x[1] = (int)(b * (u.x[1] - 1072632447) + 1072632447);
+		    u.x[0] = 0;
+		    return u.d;
+		};
+
+		inline 	double exp1(double x) {
+		  x = 1.0 + x / 256.0;
+		  x *= x; x *= x; x *= x; x *= x;
+		  x *= x; x *= x; x *= x; x *= x;
+		  return x;
+		}
+		inline double exp2(double x) {
+		  x = 1.0 + x / 1024;
+		  x *= x; x *= x; x *= x; x *= x;
+		  x *= x; x *= x; x *= x; x *= x;
+		  x *= x; x *= x;
+		  return x;
+		}
+		double exp_fast(double a)
+		{
+		   union { double d; long long x; } u;
+		   u.x = (long long)(6497320848556798LL * a + 0x3fef127e83d16f12LL);
+		   return u.d;
+		}
 		//Variables
 		bool status;
 
@@ -32,6 +99,8 @@ class compressor{
 		float t_attack;
 		float t_release;
 		float t_rms;
+
+		float diffsum;
 
 	private:
 

@@ -24,10 +24,10 @@ void compressor::init(void){
 	comp_gain=0;
 	target_gain=0;
 
-	input_gain=4;
-	output_gain=1;
-	threshold=10;
-	ratio=10;
+	input_gain=2;
+	output_gain=3;
+	threshold=9;
+	ratio=2;
 	slope=1-1/ratio;
 	t_attack=10;	//In ms
 	t_release=200;	//In ms
@@ -35,6 +35,8 @@ void compressor::init(void){
 	limit_gain=1/ratio;
 
 
+	natlogof2=log(2);
+	diffsum=0;
 
 	t_main=0;
 
@@ -201,7 +203,8 @@ float compressor::process_lg(float x){
 	//Update the RMS Value
 	c_rms=fast_sqroot(rms_sum);
 
-	c_rms=log2(c_rms);
+	//Get logarithmic value
+	c_rms=fast_log2(c_rms);
 
 	//Update the buffer
 	rmsbuf[rptr]=x;
@@ -229,16 +232,32 @@ float compressor::process_lg(float x){
 		ptr=0;;
 	}
 
-
 	//Apply gain
 
 	//Get the difference
-	float diff;
+//	float diff;
+//
+//	float deviation;
+//	float tg2;
+
+	//Calculating attenuation
+	float exponent;
 
 	if(c_rms>threshold){
-		diff=c_rms-threshold;
-		target_gain=pow(2,-1*diff*slope);
-//		printf("G:%.3f\n",comp_gain);
+
+		//Calculating exponent according Udo Zölzer
+		exponent=-1*(c_rms-threshold)*slope;
+//		target_gain=pow(2,exponent);
+
+		//Exponents smaller than -1500 are making fast algorithms unstable
+		if(exponent<-100){
+			target_gain=0;
+		}else{
+			target_gain=fastPow(2,exponent);
+//			target_gain=exp_fast(natlogof2*attenuation);
+//			target_gain=pow(2,exponent);
+
+		}
 	}else{
 		target_gain=1;
 	}
@@ -277,9 +296,9 @@ float compressor::process_lg(float x){
 
 
 
-	y=y*target_gain*output_gain;
+	y=y*comp_gain*output_gain;
 
-	if(comp_gain!=1){
+	if(comp_gain>0.1){
 //		printf("Release: Target:%.3f\t Current:%.3f\n",target_gain, comp_gain);
 //		printf("x:%f, y:%f, \tG=%f \t RMS: %f\n",x,y,comp_gain,c_rms);
 	}
@@ -288,28 +307,6 @@ float compressor::process_lg(float x){
 //	return 0;
 }
 
-float compressor::fast_sqroot(float number){
-
-	    const float threehalfs = 1.5F;
-
-	    float x2 = number * 0.5F;
-	    float y = number;
-
-	    // evil floating point bit level hacking
-	    long i = * ( long * ) &y;
-
-	    // value is pre-assumed
-	    i = 0x5f3759df - ( i >> 1 );
-	    y = * ( float * ) &i;
-
-	    // 1st iteration
-	    y = y * ( threehalfs - ( x2 * y * y ) );
-
-	    // 2nd iteration, this can be removed
-	    // y = y * ( threehalfs - ( x2 * y * y ) );
 
 
-	return y*number;
-//	return 0;
-}
 
