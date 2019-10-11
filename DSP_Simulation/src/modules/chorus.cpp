@@ -14,35 +14,47 @@
 
 void chorus::init(void){
 
-	//Chorus parameter
-	G_d=0.9; //Dry gain (Dry/Wet mix)
-	G_w=0.3; //Wet gain (Dry/Wet mix)
-	depth=2; //Depth
-	d_base=10;	//Base delay in ms /Max 25
-	rate=1;
-
 	//Chorus pointer
 	cptr=0;
-
-	//Angle step
-	a_step=(rate*2*PI)/(FS);
 
 	//Current angle of LFO
 	a_lfo=0;
 
+	//Angle step
+	a_step=(rate*2*PI)/FS;
+
 	//Resetting buffer
 	reset_buffer();
-
-	//Status set
-	status=1;
-
 }
 
-void chorus::reset(void){
+void chorus::stop(void){
+
+	//Status set
+	status=0;
 
 	//Fill the delay buffer with zeros
 	reset_buffer();
 
+}
+
+void chorus::start(void){
+
+	//Status set
+	status=1;
+}
+
+void chorus::set_wet(float *w){
+	G_w=*w*0.01;
+	G_d=1-G_w;
+}
+
+void chorus::set_depth(float *d){
+	depth=*d;
+}
+
+void chorus::set_rate(float *r){
+	rate=*r;
+	a_step=(rate*2*PI)/FS;
 }
 
 void chorus::reset_buffer(void){
@@ -51,13 +63,6 @@ void chorus::reset_buffer(void){
 
 	memset(cbuf, 0, chorus_len*sizeof(*cbuf));
 }
-
-void chorus::update(float* param_arr){
-
-
-
-}
-
 
 float chorus::process(float x){
 

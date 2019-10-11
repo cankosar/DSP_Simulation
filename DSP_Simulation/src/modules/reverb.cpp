@@ -32,17 +32,22 @@ void reverb::init(void){
 	inst_allpass[3].init(bufap1,sbuf_ap_4);
 
 	//Resetting buffer
-	reset();
+	reset_buffer();
 
-	//Status set
-	status=1;
 
-	//Set initial parameters
-	float paramhash[]={initialdry,initialwet,initialroom,initialdamp};
-	update(paramhash);
 }
 
-void reverb::reset(void){
+void reverb::start(void){
+
+	//Set status
+	status=1;
+}
+
+void reverb::stop(void){
+
+	//Set status
+	status=0;
+
 	//Fill the delay buffer with zeros
 	reset_buffer();
 }
@@ -62,11 +67,24 @@ void reverb::reset_buffer(void){
 
 }
 
-void reverb::update(float* param_arr){
+void reverb::set_wet(float* w){
 
 	//Update the dry&wet mix
-	drymix=param_arr[0];
-	wetmix=param_arr[1];
+	wetmix=*w*0.01;
+	drymix=1-wetmix;
+
+}
+
+void reverb::set_size(float* w){
+
+	//Scale and set feedback parameter
+	float feedback=(*w*scaleroom) + offsetroom;
+
+}
+
+void reverb::update(float* param_arr){
+
+
 
 	//Scale and set feedback parameter
 	float feedback=(param_arr[2]*scaleroom) + offsetroom;

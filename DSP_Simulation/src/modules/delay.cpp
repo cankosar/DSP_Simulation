@@ -12,28 +12,13 @@
 
 void delay::init(void){
 
-	//Dummy delay parameter
-	G_fb=0.3; //Feedback gain
-	G_d=1; //Dry gain (Dry/Wet mix)
-	G_w=0.2; //Wet gain (Dry/Wet mix)
-	delay_time=0.5; //Delay time in seconds
-
+	//Set parameters
 	n_distance=delay_time*FS;
 
 	//Delay array pointer
 	dptr=0;
 
 	//Clean buffer
-	reset_buffer();
-
-	//Set status
-	status=1;
-
-}
-
-void delay::reset(){
-
-	//Fill the delay buffer with zeros
 	reset_buffer();
 
 }
@@ -44,10 +29,44 @@ void delay::reset_buffer(void){
 	memset(dbuf, 0, delay_len*sizeof(*dbuf));
 }
 
-void delay::update(float *param_arr){
+void delay::set_wet(float *wet){
 
+	G_w=*wet*0.01;
 
+}
 
+void delay::set_dry(float *dry){
+
+	G_d=*dry*0.01;
+
+}
+
+void delay::set_time(float *time){
+
+//	delay_time=*time*0.001;		//Should be unnecessary
+	n_distance=*time*FSms;
+
+}
+
+void delay::set_feedback(float* fb){
+
+	G_fb=*fb*0.009;		//Max value: 0.9 for stability reasons
+
+}
+
+void delay::start(void){
+
+	if(!status){
+		status=1;
+	}
+}
+
+void delay::stop(void){
+
+	if(status){
+		status=0;
+		reset_buffer();
+	}
 }
 
 float delay::process(float x){

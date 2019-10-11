@@ -13,8 +13,9 @@ class biquad{
 	public:
 		//Methods
 		void init(void);
-		void reset(void);
-		void update(float* param_arr);
+		void start(void);
+		void stop(void);
+		void set_param(float *b0, float *b1, float *b2, float *a0, float *a1);
 		float process(float);
 		void apply_filter(unsigned short type, float g, float f0, float Q);
 
@@ -26,9 +27,11 @@ class biquad{
 		//Methods
 		void reset_buffer(void);
 
-		//Variables
+		//Buffer
 		float y,y1,y2,x1,x2;
-		float param[5];
+
+		//Parameters with default initializers
+		float param[5]={1,0,0,0,0};
 
 };
 

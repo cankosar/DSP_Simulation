@@ -13,9 +13,9 @@ class overdrive{
 	public:
 		//Methods
 		void init(void);
-		void reset(void);
+		void start(void);
+		void stop(void);
 		float process(float x);
-		void update(float* param_arr);
 
 		//Variables
 		bool status;
@@ -23,8 +23,8 @@ class overdrive{
 	private:
 		//Variables
 		float downscaler;
-		float upscaler;
-		float gain;
+		float upscaler=1000;
+		float gain=10;
 
 };
 

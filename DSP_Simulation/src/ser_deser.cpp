@@ -65,8 +65,12 @@ int ser_deser::process(void){
 	//Initialize DSP
 	inst_dsp.init();
 
+	//Start DSP
+	inst_dsp.start();
+
 	//Update parameter once
 	inst_dsp.update();
+
 
 	//Serialize
 	unsigned int i=0;

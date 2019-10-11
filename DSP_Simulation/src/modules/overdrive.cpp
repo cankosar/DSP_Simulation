@@ -13,21 +13,21 @@
 
 void overdrive::init(void){
 
-	gain=10;
-	upscaler=1000;
+	//Init help parameters
 	downscaler=1/upscaler;
+
+}
+
+void overdrive::start(void){
 
 	//Set status
 	status=1;
-
 }
 
-void overdrive::reset(void){
+void overdrive::stop(void){
 
-}
-
-void overdrive::update(float *param_arr){
-
+	//Set status
+	status=0;
 }
 
 float overdrive::process(float x){

@@ -13,13 +13,7 @@
 
 void biquad::init(void){
 
-	reset_buffer();
-	status=1;
-}
-
-void biquad::reset(void){
-
-	//Reset the buffer
+	//Initial reset of buffer
 	reset_buffer();
 }
 
@@ -32,6 +26,19 @@ void biquad::reset_buffer(void){
 	y2=0;
 
 }
+
+void biquad::start(void){
+	status=1;
+}
+
+void biquad::stop(void){
+
+	if(status){
+		status=0;
+		reset_buffer();
+	}
+}
+
 
 void biquad::apply_filter(unsigned short type, float g, float f0, float Q){
 
@@ -104,14 +111,14 @@ void biquad::apply_filter(unsigned short type, float g, float f0, float Q){
 }
 
 
-void biquad::update(float* param_arr){
+void biquad::set_param(float *b0, float *b1, float *b2, float *a0, float *a1){
 
-	unsigned int i;
-
-	for(i=0;i<5;i++){
-		param[i]=param_arr[i];
-	}
-
+	//Set parameter
+	param[0]=*b0;
+	param[1]=*b1;
+	param[2]=*b2;
+	param[3]=*a0;
+	param[4]=*a1;
 }
 
 float biquad::process(float x){

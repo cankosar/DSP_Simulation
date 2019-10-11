@@ -14,9 +14,13 @@ class chorus{
 
 		//Methods
 		void init(void);
-		void reset(void);
+		void start(void);
+		void stop(void);
 		float process(float x);
-		void update(float* update_params);
+
+		void set_wet(float *w);
+		void set_depth(float *d);
+		void set_rate(float *r);
 
 		//Variables
 		bool status;
@@ -28,12 +32,12 @@ class chorus{
 		float get_current_delay(void);
 		float lfo(void);
 
-		//Chorus parameter
-		float G_d; 			//Dry gain (Dry/Wet mix)
-		float G_w; 			//Wet gain (Dry/Wet mix)
-		float depth; 		//Depth
-		float d_base;		//Base delay in ms
-		float rate;			//Rate
+		//Chorus parameter with initializers
+		float G_d=0.9; 			//Dry gain (Dry/Wet mix)
+		float G_w=0.3; 			//Wet gain (Dry/Wet mix)
+		float depth=2; 		//Depth
+		float d_base=25;		//Base delay in ms
+		float rate=1;			//Rate
 
 		//Chorus buffer
 		static const unsigned chorus_len=1200;

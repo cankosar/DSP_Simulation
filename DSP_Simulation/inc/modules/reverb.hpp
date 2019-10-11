@@ -17,9 +17,14 @@ class reverb{
 	public:
 		//Methods
 		void init(void);
-		void reset(void);
+		void start(void);
+		void stop(void);
 		float process(float x);
-		void update(float* param_arr);
+
+		void set_wet(float* w);
+		void set_size(float* s);
+		void set_damp(float* d);
+
 
 		//Variables
 		bool status;
@@ -50,10 +55,10 @@ class reverb{
 		allpass inst_allpass[n_allpass];
 
 		//Parameter
-		float drymix;
-		float wetmix;
-		float roomsize;
-		float damp;
+		float drymix=1;
+		float wetmix=0;;
+		float roomsize=0.9;
+		float damp=0.2;
 
 };
 

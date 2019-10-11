@@ -121,28 +121,31 @@ int dsp::process(int* x){
 
 }
 
-void dsp::reset(void){
+void dsp::stop(void){
 
 
 	//This routine reset all the DSP functionalities
 
+	//Reset status
+	status=0;
+
 	//Reset biquads
 	unsigned int i;
 	for(i=0;i<n_biquad;i++){
-		inst_biquad[i].reset();
+		inst_biquad[i].stop();
 	}
 
 	//Reset delay
-	inst_delay.reset();
+	inst_delay.stop();
 
 	//Reset chorus
-	inst_chorus.reset();
+	inst_chorus.stop();
 
 	//Reset overdrive
-	inst_overdrive.reset();
+	inst_overdrive.stop();
 
 	//Reset reverb
-	inst_reverb.reset();
+	inst_reverb.stop();
 
 	//Reset tremolo
 	inst_tremolo.reset();
@@ -150,29 +153,33 @@ void dsp::reset(void){
 	//Reset rotary
 	inst_rotary.reset();
 
+	//Reset status
+	status=0;
+
 }
+
+void dsp::start(void){
+	status=1;
+}
+
 
 void dsp::update(void){
 
 	/*Here comes the update hash */
 
 	//Dummy hash
-	unsigned banks=0b100000000001;
+	unsigned banks=0b000000000101;
 
 	//General DSP bank
-	if(banks&(1<<c_dsp_bank)){		//Bank active
-		status=1;
-	}else{							//Bank inactive
-		if(status){					//If bank was active before
-			reset();
-		}
-		status=0;
+	if(banks&(1<<c_dsp_bank)){
+		start();
+	}else{
+		stop();
 	}
 
 	bool dsp_state_store=0;
 	//Tuner bank
-	if(banks&(1<<c_tuner_bank)){		//Bank active
-
+	if(banks&(1<<c_tuner_bank)){
 		//Store DSP state while entering tuner mode
 		dsp_state_store=status;
 
@@ -180,16 +187,16 @@ void dsp::update(void){
 		status=0;
 
 		//Reset all banks
-		reset();
+		stop();
 
 		//Activate tuner bank
 		inst_tuner.status=1;
 
-	}else{							//Bank inactive
+	}else{
 
 		//Deactivate tuner
 		inst_tuner.status=0;
-		if(inst_tuner.status){					//If bank was active before
+		if(inst_tuner.status){
 			inst_tuner.reset();
 		}
 
@@ -204,89 +211,63 @@ void dsp::update(void){
 	unsigned i;
 	for(i=0;i<n_EQ;i++){
 		//EQ banks
-		if(banks&(1<<(i+c_EQ_bank))){		//Bank active
-			inst_biquad[i].status=1;
-		}else{								//Bank inactive
-			if(inst_biquad[i].status){		//If bank was active before
-				inst_biquad[i].reset();
-			}
-			inst_biquad[i].status=0;
+		if(banks&(1<<(i+c_EQ_bank))){
+			inst_biquad[i].start();
+		}else{
+			inst_biquad[i].stop();
 		}
 	}
 
 	//Delay bank
-	if(banks&(1<<(c_delay_bank))){		//Bank active
-		inst_delay.status=1;
-	}else{								//Bank inactive
-		if(inst_delay.status){			//If bank was active before
-			inst_delay.reset();
-		}
-		inst_delay.status=0;
+	if(banks&(1<<(c_delay_bank))){
+		inst_delay.start();
+	}else{
+		inst_delay.stop();
 	}
 
 	//Chorus bank
-	if(banks&(1<<(c_chorus_bank))){		//Bank active
-		inst_chorus.status=1;
-	}else{								//Bank inactive
-		if(inst_chorus.status){			//If bank was active before
-			inst_chorus.reset();
-		}
-		inst_chorus.status=0;
+	if(banks&(1<<(c_chorus_bank))){
+		inst_chorus.start();
+	}else{
+		inst_chorus.stop();
 	}
 
 	//Overdrive bank
-	if(banks&(1<<(c_overdrive_bank))){		//Bank active
-		inst_overdrive.status=1;
-		inst_biquad[c_overdrive_prefilter_id].status=1;
-		inst_biquad[c_overdrive_postfilter_id].status=1;
-	}else{										//Bank inactive
-		if(inst_overdrive.status){				//If bank was active before
-			inst_overdrive.reset();
-			inst_biquad[c_overdrive_prefilter_id].reset();
-			inst_biquad[c_overdrive_postfilter_id].reset();
-		}
-		inst_overdrive.status=0;
-		inst_biquad[c_overdrive_prefilter_id].status=0;
-		inst_biquad[c_overdrive_postfilter_id].status=0;
+	if(banks&(1<<(c_overdrive_bank))){
+		inst_overdrive.start();
+		inst_biquad[c_overdrive_prefilter_id].start();
+		inst_biquad[c_overdrive_postfilter_id].start();
+	}else{
+		inst_overdrive.stop();
+		inst_biquad[c_overdrive_prefilter_id].stop();
+		inst_biquad[c_overdrive_postfilter_id].stop();
 	}
 
 	//Reverb bank
-	if(banks&(1<<(c_reverb_bank))){		//Bank active
-		inst_reverb.status=1;
-	}else{								//Bank inactive
-		if(inst_reverb.status){			//If bank was active before
-			inst_reverb.reset();
-		}
-		inst_reverb.status=0;
+	if(banks&(1<<(c_reverb_bank))){
+		inst_reverb.start();
+	}else{
+		inst_reverb.stop();
 	}
 
-	//Tremolo bank
-	if(banks&(1<<(c_tremolo_bank))){		//Bank active
-		inst_tremolo.status=1;
-	}else{								//Bank inactive
-		if(inst_tremolo.status){			//If bank was active before
-			inst_tremolo.reset();
-		}
-		inst_tremolo.status=0;
-	}
-
-	//Rotary bank
-	if(banks&(1<<(c_rotary_bank))){		//Bank active
-		inst_rotary.status=1;
-	}else{								//Bank inactive
-		if(inst_rotary.status){			//If bank was active before
-			inst_rotary.reset();
-		}
-		inst_rotary.status=0;
-	}
-
-	//Compressor bank
-	if(banks&(1<<(c_compressor_bank))){		//Bank active
-		inst_compressor.status=1;
-	}else{								//Bank inactive
-		if(inst_compressor.status){			//If bank was active before
-			inst_compressor.reset();
-		}
-		inst_compressor.status=0;
-	}
+//	//Tremolo bank
+//	if(banks&(1<<(c_tremolo_bank))){
+//		inst_tremolo.start();
+//	}else{
+//		inst_tremolo.stop();
+//	}
+//
+//	//Rotary bank
+//	if(banks&(1<<(c_rotary_bank))){
+//		inst_rotary.start();
+//	}else{
+//		inst_rotary.stop();
+//	}
+//
+//	//Compressor bank
+//	if(banks&(1<<(c_compressor_bank))){
+//		inst_compressor.start();
+//	}else{
+//		inst_compressor.stop();
+//	}
 }

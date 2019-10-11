@@ -22,8 +22,9 @@ class dsp{
 	public:
 		//Methods
 		void init(void);
-		void reset(void);
 		int process(int* x);
+		void start(void);
+		void stop(void);
 		void update(void);
 
 		//Variables
