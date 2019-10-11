@@ -7,8 +7,6 @@
 
 #include "stdio.h"
 #include "string.h"
-//#include "math.h"
-//#include "../../inc/constants.hpp"
 #include "../../inc/modules/reverb_parameters.hpp"
 #include "../../inc/modules/comb.hpp"
 #include "../../inc/modules/denormals.h"
@@ -26,8 +24,23 @@ void comb::init(float* bufptr, unsigned size){
 	//Resetting buffer
 	reset_buffer();
 
+}
+
+void comb::stop(void){
+
+	//Status set
+	status=0;
+	//Fill the delay buffer with zeros
+	reset_buffer();
+
+}
+
+void comb::start(void){
+
 	//Status set
 	status=1;
+	//Fill the delay buffer with zeros
+	reset_buffer();
 
 }
 
@@ -37,6 +50,7 @@ void comb::reset(void){
 	reset_buffer();
 
 }
+
 
 void comb::reset_buffer(void){
 
@@ -49,18 +63,21 @@ void comb::reset_buffer(void){
 //	}
 }
 
-void comb::update(float feedback_in, float damp){
-
-	//Scale and set damp
-	damp1=damp;
-	//Helping variable damp2
-	damp2=1-damp1;
+void comb::set_feedback(float* fb){
 
 	//Scale and set feedback parameter
-	feedback=(feedback_in*scaleroom) + offsetroom;
+	feedback=*fb;
 
 }
 
+void comb::set_damp(float *damp){
+
+	//Scale and set damp
+	damp1=*damp;
+	//Helping variable damp2
+	damp2=1-damp1;
+
+}
 
 float comb::process(float x){
 

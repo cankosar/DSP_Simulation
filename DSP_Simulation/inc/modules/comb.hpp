@@ -13,9 +13,12 @@ class comb{
 		public:
 		//Methods
 		void init(float* bufptr, unsigned bufsize);
+		void start(void);
+		void stop(void);
 		void reset(void);
 		float process(float x);
-		void update(float feedback, float damp);
+		void set_feedback(float* fb);
+		void set_damp(float *damp);
 
 		//Variables
 		bool status;

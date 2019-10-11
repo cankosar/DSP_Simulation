@@ -14,9 +14,12 @@ class tremolo{
 
 		//Methods
 		void init(void);
-		void reset(void);
+		void start(void);
+		void stop(void);
 		float process(float x);
-		void update(float* update_params);
+		void set_depth(float* d);
+		void set_freq(float* f);
+		void set_type(float* t);
 
 		//Variables
 		bool status;
@@ -26,7 +29,7 @@ class tremolo{
 		//Methods
 		float get_current_attenuation(void);
 		float lfo(void);
-
+		void update_step(void);
 		//Rotary parameter
 		float depth; 		//Depth
 		float frequency;			//Rate
@@ -39,6 +42,11 @@ class tremolo{
 
 		//Type of wave generator
 		unsigned type;		//0:triangle 1:square 2: sinus
+
+		//Initial vaules
+		float initial_depth=100;
+		float initial_freq=20;
+		float initial_type=1;
 };
 
 

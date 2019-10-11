@@ -13,12 +13,15 @@ class tuner{
 	public:
 		//Methods
 		void init(void);
-		void reset(void);
+		void start(void);
+		void stop(void);
 		void process(float x);
-		void update(float* param_arr);
 
 		//Variables
 		bool status;
+
+		//Current estimated frequency
+		float fc;
 
 	private:
 		//Methods
@@ -56,8 +59,7 @@ class tuner{
 		float last_conf_f;
 		unsigned long last_conf_t;
 		unsigned long conf_timeout=500;		//Timeout in ms
-		//Current estimated frequencies
-		float fc;
+
 };
 
 

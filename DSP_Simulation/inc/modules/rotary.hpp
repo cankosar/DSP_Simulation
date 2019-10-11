@@ -14,9 +14,11 @@ class rotary{
 
 		//Methods
 		void init(void);
-		void reset(void);
+		void start(void);
+		void stop(void);
 		float process(float x);
-		void update(float* update_params);
+		void set_depth(float* d);
+		void set_freq(float* f);
 
 		//Variables
 		bool status;
@@ -27,11 +29,11 @@ class rotary{
 		void reset_buffer(void);
 		float get_current_delay(void);
 		float lfo(void);
+		void update_step(void);
 
 		//Chorus parameter
 		float depth; 		//Depth
-		float d_base;		//Base delay in ms
-		float rate;			//Rate
+		float freq;			//Rate
 
 		//Chorus buffer
 		static const unsigned rotary_len=1200;
@@ -42,6 +44,12 @@ class rotary{
 		float a_step;
 		float a_lfo;
 
+		//Config parameters
+		const float d_base=5;
+
+		//Initial values
+		float initial_depth=50;
+		float initial_freq=5;
 };
 
 

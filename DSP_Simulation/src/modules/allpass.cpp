@@ -25,8 +25,23 @@ void allpass::init(float* bufptr, unsigned size){
 	//Resetting buffer
 	reset_buffer();
 
+
+
+}
+void allpass::start(void){
+
 	//Status set
 	status=1;
+
+}
+
+void allpass::stop(void){
+
+	//Status set
+	status=0;
+
+	//Fill the delay buffer with zeros
+	reset_buffer();
 
 }
 
@@ -34,7 +49,6 @@ void allpass::reset(void){
 
 	//Fill the delay buffer with zeros
 	reset_buffer();
-
 }
 
 void allpass::reset_buffer(void){
@@ -48,9 +62,9 @@ void allpass::reset_buffer(void){
 //	}
 }
 
-void allpass::update(float feedback_in){
+void allpass::set_feedback(float *fb){
 
-	feedback=feedback_in;
+	feedback=*fb;
 
 }
 

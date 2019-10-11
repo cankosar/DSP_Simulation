@@ -13,10 +13,10 @@
 void delay::init(void){
 
 	//Set parameters
-	n_distance=delay_time*FS;
-
-	//Delay array pointer
-	dptr=0;
+	set_wet(&initial_wet);
+	set_dry(&initial_dry);
+	set_feedback(&initial_fb);
+	set_time(&initial_time);
 
 	//Clean buffer
 	reset_buffer();
@@ -27,6 +27,9 @@ void delay::reset_buffer(void){
 	//Fill the delay buffer with zeros
 
 	memset(dbuf, 0, delay_len*sizeof(*dbuf));
+
+	//Delay array pointer
+	dptr=0;
 }
 
 void delay::set_wet(float *wet){
@@ -43,8 +46,8 @@ void delay::set_dry(float *dry){
 
 void delay::set_time(float *time){
 
-//	delay_time=*time*0.001;		//Should be unnecessary
-	n_distance=*time*FSms;
+	delay_time=*time*0.001;		//Should be unnecessary
+	n_distance=(unsigned long)(*time*FSms);
 
 }
 
@@ -56,17 +59,15 @@ void delay::set_feedback(float* fb){
 
 void delay::start(void){
 
-	if(!status){
-		status=1;
-	}
+	status=1;
+
 }
 
 void delay::stop(void){
 
-	if(status){
-		status=0;
-		reset_buffer();
-	}
+	status=0;
+	reset_buffer();
+
 }
 
 float delay::process(float x){

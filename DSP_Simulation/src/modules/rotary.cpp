@@ -14,33 +14,45 @@
 
 void rotary::init(void){
 
-	//Chorus parameter
-	depth=0.5; //Depth
-	d_base=5;	//Base delay in ms
-	rate=5;		//Max. 25
-
-	//Chorus pointer
-	rptr=0;
-
-	//Angle step
-	a_step=(rate*2*PI)/(FS);
-
-	//Current angle of LFO
-	a_lfo=0;
+	//Set initial parameters
+	set_depth(&initial_depth);
+	set_freq(&initial_freq);
 
 	//Resetting buffer
 	reset_buffer();
 
-	//Status set
-	status=1;
+	//Chorus pointer
+	rptr=0;
 
+	//Current angle of LFO
+	a_lfo=0;
 }
 
-void rotary::reset(void){
+void rotary::update_step(void){
+
+	//Angle step
+	a_step=(freq*2*PI)/(FS);
+}
+
+void rotary::start(void){
+
+	//Set status
+	status=1;
+}
+
+void rotary::stop(void){
+
+	//Set status
+	status=0;
 
 	//Fill the delay buffer with zeros
 	reset_buffer();
 
+	//Chorus pointer
+	rptr=0;
+
+	//Current angle of LFO
+	a_lfo=0;
 }
 
 void rotary::reset_buffer(void){
@@ -50,10 +62,15 @@ void rotary::reset_buffer(void){
 	memset(rbuf, 0, rotary_len*sizeof(*rbuf));
 }
 
-void rotary::update(float* param_arr){
+void rotary::set_depth(float* d){
 
+	depth=*d*0.01;
+}
 
+void rotary::set_freq(float* f){
 
+	freq=*f;
+	update_step();
 }
 
 

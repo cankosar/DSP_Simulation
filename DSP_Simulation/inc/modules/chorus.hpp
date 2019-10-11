@@ -33,14 +33,24 @@ class chorus{
 		float lfo(void);
 
 		//Chorus parameter with initializers
-		float G_d=0.9; 			//Dry gain (Dry/Wet mix)
-		float G_w=0.3; 			//Wet gain (Dry/Wet mix)
-		float depth=2; 		//Depth
-		float d_base=25;		//Base delay in ms
-		float rate=1;			//Rate
+		float G_d; 			//Dry gain (Dry/Wet mix)
+		float G_w; 			//Wet gain (Dry/Wet mix)
+		float depth; 		//Depth
+		float rate;			//Rate
+
+		//Config parameters
+		float d_base=10;		//Base delay in ms
+
+		//Initial parameters
+		float initial_wet=30; 			//Wet gain (Dry/Wet mix)
+		float initial_depth=50; 		//Depth
+		float initial_rate=7;
+
+
+
 
 		//Chorus buffer
-		static const unsigned chorus_len=1200;
+		static const unsigned chorus_len=1300;
 		float* cbuf = new float[chorus_len];
 		unsigned cptr;
 

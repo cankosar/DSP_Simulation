@@ -31,7 +31,9 @@ class biquad{
 		float y,y1,y2,x1,x2;
 
 		//Parameters with default initializers
-		float param[5]={1,0,0,0,0};
+		float param[5];
+
+		float initial_param[5]={1,0,0,0,0};
 
 };
 

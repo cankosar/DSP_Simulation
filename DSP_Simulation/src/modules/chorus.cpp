@@ -14,14 +14,10 @@
 
 void chorus::init(void){
 
-	//Chorus pointer
-	cptr=0;
-
-	//Current angle of LFO
-	a_lfo=0;
-
-	//Angle step
-	a_step=(rate*2*PI)/FS;
+	//Initialize parameters
+	set_wet(&initial_wet);
+	set_depth(&initial_depth);
+	set_rate(&initial_rate);
 
 	//Resetting buffer
 	reset_buffer();
@@ -49,12 +45,12 @@ void chorus::set_wet(float *w){
 }
 
 void chorus::set_depth(float *d){
-	depth=*d;
+	depth=*d*0.01;
 }
 
 void chorus::set_rate(float *r){
 	rate=*r;
-	a_step=(rate*2*PI)/FS;
+	a_step=(rate*2*PI)/(float)FS;
 }
 
 void chorus::reset_buffer(void){
@@ -62,6 +58,12 @@ void chorus::reset_buffer(void){
 	//The size of the float is 4
 
 	memset(cbuf, 0, chorus_len*sizeof(*cbuf));
+
+	//Chorus pointer
+	cptr=0;
+
+	//Current angle of LFO
+	a_lfo=0;
 }
 
 float chorus::process(float x){

@@ -14,60 +14,70 @@
 
 void compressor::init(void){
 
-	//Parameter
-
-	//Init pointer
-	rptr=0;
-	ptr=0;
-
-	//Init parameter
-	comp_gain=0;
-	target_gain=0;
-
-	input_gain=2;
-	output_gain=3;
-	threshold=9;
-	ratio=2;
-	slope=1-1/ratio;
-	t_attack=10;	//In ms
-	t_release=200;	//In ms
-	t_rms=25;		//In ms
-	limit_gain=1/ratio;
+	//Initialize parameter
+	set_threshold(&initial_threshold);
+	set_ratio(&initial_ratio);
+	set_attack(&initial_attack);
 
 
-	natlogof2=log(2);
-	diffsum=0;
-
-	t_main=0;
-
-	i_attack=(unsigned long) (t_attack*(float)FSms);
-	i_release=(unsigned long) (t_release*(float)FSms);
+	//Calculate the length of delay line and RMS buffer
 	delay_len=(unsigned long) (t_main*(float)FSms);
-
 	rms_len=(unsigned long) (t_rms*(float)FSms);
 
-	stepsize_attack=1/(float)i_attack;
-	stepsize_release=1/(float)i_release;
-
-//	printf("i_attack:%d, i_release:%d, ss_attack:%f, ss_release:%f main delay len:%d\n",i_attack,i_release,stepsize_attack,stepsize_release,delay_len);
-	//RMS Update rate
-	update_rate=1000;
-	i_update=0;
-
-	//Resetting buffer
 	reset_buffer();
-
-	//Status set
-	status=1;
-
 }
 
-void compressor::reset(void){
+void compressor::start(void){
+
+	//Set status
+	status=1;
+}
+
+void compressor::stop(void){
+
+	//Set status
+	status=0;
 
 	//Fill the delay buffer with zeros
 	reset_buffer();
+}
+
+void compressor::set_threshold(float* t){
+
+	//2^15 is the max value of int16
+	//Multiplicating by 0.1666 is an approximation of conversion from log2 to log10
+	threshold=15+(*t*0.1666);
+
 
 }
+
+void compressor::set_ratio(float* r){
+
+	//Set ratio
+	ratio=*r;
+	slope=1-1/ratio;
+
+	//Set help variable limit_gain
+	limit_gain=1/ratio;
+
+
+}
+
+void compressor::set_attack(float* a){
+
+	//Set attack
+	t_attack=*a;
+	t_release=t_attack*k_attack2release;
+
+	//Update steps
+//	i_attack=(unsigned long) (t_attack*(float)FSms);
+//	i_release=(unsigned long) (t_release*(float)FSms);
+	stepsize_attack=1/(t_attack*(float)FSms);
+	stepsize_release=1/(t_release*(float)FSms);
+
+
+}
+
 
 void compressor::reset_buffer(void){
 	//Fill the delay buffer with zeros
@@ -75,23 +85,26 @@ void compressor::reset_buffer(void){
 
 	memset(rmsbuf, 0, rms_max*sizeof(*rmsbuf));
 	memset(buf, 0, buf_max*sizeof(*buf));
+
+	rms_sum=0;
+	comp_gain=0;
+	target_gain=0;
+
+	//Init pointer
+	rptr=0;
+	ptr=0;
+
 }
-
-void compressor::update(float* param_arr){
-
-
-}
-
 
 float compressor::process(float x){
 
-
-
-	x*=input_gain;
+//	x*=input_gain;
 	//Calculate RMS
 
 	//Subtract oldest the value (rmsbuf[rptr]) from the sum
-	rms_sum-=(rmsbuf[rptr]*rmsbuf[rptr])/rms_len;
+	rms_sum-=(rmsbuf[rptr]*rmsbuf[rptr])/(float)rms_len;
+
+
 
 	//Add the newest value to the sum
 	rms_sum+=(x*x)/rms_len;
@@ -101,111 +114,16 @@ float compressor::process(float x){
 		rms_sum=0;
 	}
 
-	//Update the RMS Value
-	c_rms=fast_sqroot(rms_sum);
-
-	c_rms=log2(c_rms);
-
-//	printf("x:%f, Sum:%f\t SQRT:%f\n",x,rms_sum,c_rms);
-
-//	if(i_update>=update_rate){
-//		printf("Sum:%f\t SQRT:%f\n",rms_sum,c_rms);
-//		i_update=0;
-//
-//	}
-//		i_update++;
-
-	//Update the buffer
-	rmsbuf[rptr]=x;
-
-	//Increment
-	rptr++;
-
-	if(rptr>=rms_len){
-		rptr=0;;
-	}
-
-	//Update main buf
-
-	//Output is the last value on the buffer
-	float y;
-	y=buf[ptr];
-
-	//Set the new value to the buffer
-	buf[ptr]=x;
-
-	//Increment
-	ptr++;
-
-	if(ptr>=delay_len){
-		ptr=0;;
-	}
-
-
-	//Apply gain
-
-	//Set output
-//	y=x;
-
-	//Hard knee
-	if(c_rms>threshold){
-
-		//Attack
-		if(comp_gain>limit_gain){
-		comp_gain-=stepsize_attack;
-//		printf("At:%.3f\n",comp_gain);
-		}else{
-			comp_gain=limit_gain;
-		}
-
-
-	}else{
-
-		//Release
-		if(comp_gain<1){
-		comp_gain+=stepsize_release;
-//		printf("Rl:%.3f\n",comp_gain);
-		}else{
-			comp_gain=1;
-		}
-
-	}
-
-		y=y*comp_gain*output_gain;
-
-//	if(comp_gain!=1){
-//		printf("x:%f, y:%f, \tG=%f \t RMS: %f\n",x,y,comp_gain,c_rms);
-//	}
-
-	return y;
-//	return 0;
-}
-
-
-float compressor::process_lg(float x){
-
-
-
-	x*=input_gain;
-	//Calculate RMS
-
-	//Subtract oldest the value (rmsbuf[rptr]) from the sum
-	rms_sum-=(rmsbuf[rptr]*rmsbuf[rptr])/rms_len;
-
-	//Add the newest value to the sum
-	rms_sum+=(x*x)/rms_len;
-
-	if(rms_sum<0){
-		printf("Warning: RMS sum negaive %f\n",rms_sum);
-		rms_sum=0;
-	}
 
 	//Update the RMS Value
 	c_rms=fast_sqroot(rms_sum);
 
+//	printf("c_rms:%f\n",c_rms);
 	//Get logarithmic value
 	c_rms=fast_log2(c_rms);
 
+//	printf("c_rms_lg:%f\n",c_rms);
+
 	//Update the buffer
 	rmsbuf[rptr]=x;
 
@@ -231,14 +149,6 @@ float compressor::process_lg(float x){
 	if(ptr>=delay_len){
 		ptr=0;;
 	}
-
-	//Apply gain
-
-	//Get the difference
-//	float diff;
-//
-//	float deviation;
-//	float tg2;
 
 	//Calculating attenuation
 	float exponent;
@@ -262,7 +172,7 @@ float compressor::process_lg(float x){
 		target_gain=1;
 	}
 
-
+//	printf("TG:%f\n",target_gain);
 
 	//Attack and release
 
@@ -296,7 +206,7 @@ float compressor::process_lg(float x){
 
 
 
-	y=y*comp_gain*output_gain;
+	y=y*comp_gain;
 
 	if(comp_gain>0.1){
 //		printf("Release: Target:%.3f\t Current:%.3f\n",target_gain, comp_gain);
@@ -304,7 +214,6 @@ float compressor::process_lg(float x){
 	}
 
 	return y;
-//	return 0;
 }
 
 

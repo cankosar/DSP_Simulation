@@ -8,6 +8,8 @@
 #ifndef INC_MODULES_OVERDRIVE_HPP_
 #define INC_MODULES_OVERDRIVE_HPP_
 
+#include "biquad.hpp"
+
 class overdrive{
 
 	public:
@@ -16,6 +18,9 @@ class overdrive{
 		void start(void);
 		void stop(void);
 		float process(float x);
+		void set_gain(float *g);
+		void set_HP_freq(float *f);
+		void set_LP_freq(float *f);
 
 		//Variables
 		bool status;
@@ -24,7 +29,17 @@ class overdrive{
 		//Variables
 		float downscaler;
 		float upscaler=1000;
-		float gain=10;
+		float gain;
+
+		//Initial parameters
+		float initial_gain=10;
+		float initial_HP_freq=300;
+		float initial_LP_freq=3500;
+
+
+
+		biquad pre_filter;
+		biquad post_filter;
 
 };
 

@@ -13,8 +13,17 @@
 
 void biquad::init(void){
 
+	//Set initial parameters
+	set_param(&initial_param[0],
+				&initial_param[1],
+				&initial_param[2],
+				&initial_param[3],
+				&initial_param[4]);
+
 	//Initial reset of buffer
 	reset_buffer();
+
+
 }
 
 void biquad::reset_buffer(void){
@@ -33,10 +42,8 @@ void biquad::start(void){
 
 void biquad::stop(void){
 
-	if(status){
-		status=0;
-		reset_buffer();
-	}
+	status=0;
+	reset_buffer();
 }
 
 

@@ -15,42 +15,57 @@
 void tremolo::init(void){
 
 	//Tremolo parameter
-	depth=1; 	//Depth
-	frequency=10;	//Rate
+	set_depth(&initial_depth);
+	set_freq(&initial_freq);
+	set_type(&initial_type);
 
-	type=1;		//Tremolo type
+	//Current angle of LFO
+	i_lfo=0;
 
+}
+
+
+void tremolo::start(void){
+
+	status=1;
+
+}
+
+void tremolo::stop(void){
+
+	status=0;
+
+	//Current angle of LFO
+	i_lfo=0;
+}
+
+void tremolo::set_depth(float* d){
+
+	depth=*d*0.01;
+
+}
+
+void tremolo::set_freq(float* f){
+
+	frequency=*f;
+	update_step();
+}
+
+void tremolo::set_type(float *t){
+
+	type=(unsigned)*t;
+
+}
+
+void tremolo::update_step(void){
 
 	//Calculate algorithm parameters
 	t_step=frequency/FS;
 
 	//Angle step
 	a_step=frequency*(2*PI)/FS;
-
-	//Current angle of LFO
-	i_lfo=0;
-
-	//Resetting buffer
-	reset();
-
-	//Status set
-	status=1;
-
 }
 
-void tremolo::reset(void){
-
-	//Reset LFO
-	i_lfo=0;
-
-}
-
-
-void tremolo::update(float* param_arr){
-
-
-
-}
 
 
 float tremolo::process(float x){

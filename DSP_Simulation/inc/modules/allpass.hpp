@@ -13,9 +13,11 @@ class allpass{
 	public:
 		//Methods
 		void init(float* bufptr, unsigned size);
+		void start(void);
+		void stop(void);
 		void reset(void);
 		float process(float x);
-		void update(float feedback);
+		void set_feedback(float *fb);
 
 		//Variables
 		bool status;

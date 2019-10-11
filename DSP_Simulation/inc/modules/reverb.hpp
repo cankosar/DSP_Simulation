@@ -49,16 +49,26 @@ class reverb{
 		float bufap3[sbuf_ap_3];
 		float bufap4[sbuf_ap_4];
 
-		//Instances
+		//Calibration values
+		const float fixedgain		= 0.01f;
+		const float scaledamp		= 0.4f;
+		const float scaleroom		= 0.28f;
+		const float offsetroom	= 0.7f;
 
+		//Initial values
+		float initial_size	= 80.0f;
+		float initial_damp	= 40.0f;
+		float initial_wet	= 60.0f;
+
+		//Instances
 		comb inst_comb[n_comb];
 		allpass inst_allpass[n_allpass];
 
 		//Parameter
-		float drymix=1;
-		float wetmix=0;;
-		float roomsize=0.9;
-		float damp=0.2;
+		float drymix;
+		float wetmix;;
+		float roomsize;
+		float damp;
 
 };
 

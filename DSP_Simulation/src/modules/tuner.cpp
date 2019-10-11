@@ -13,24 +13,28 @@
 void tuner::init(void){
 
 	//Reset buffer
-	reset();
+	reset_buffer();
 
 	//Set status
 	status=1;
 
 }
 
-void tuner::reset(void){
+void tuner::start(void){
 
+	//Set status
+	status=1;
+}
+
+
+void tuner::stop(void){
+
+	//Set status
+	status=0;
 	//Reset buffer
 	reset_buffer();
 
-	//Reset the pointer
-	tptr=0;
-	maptr=0;
 
-	last_conf_f=0;
-	last_conf_t=0;
 
 
 }
@@ -43,10 +47,13 @@ void tuner::reset_buffer(void){
 	//Reset moving average buffer
 	memset(buf_maf, 0, l_maf*sizeof(*buf_maf));
 
+	//Reset the pointer
+	tptr=0;
+	maptr=0;
 
-}
+	last_conf_f=0;
+	last_conf_t=0;
 
-void tuner::update(float *param_arr){
 
 }
 
@@ -277,6 +284,6 @@ void tuner::estimate_freq(void){
 
 	}
 
-//	printf("Fc=%.2f\n",fc);
+	printf("Fc=%.2f\n",fc);
 
 }

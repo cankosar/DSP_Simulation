@@ -30,16 +30,22 @@ class delay{
 		void reset_buffer(void);
 
 		//Parameters with default values
-		float G_fb=0.3; 		//Feedback gain
-		float G_d=1; 			//Dry gain (Dry/Wet mix)
-		float G_w=0.2; 			//Wet gain (Dry/Wet mix)
-		float delay_time=0.5; 	//Delay time in seconds
+		float G_fb; 		//Feedback gain
+		float G_d; 			//Dry gain (Dry/Wet mix)
+		float G_w; 			//Wet gain (Dry/Wet mix)
+		float delay_time; 	//Delay time in seconds
 
 		//Buffers
 		static const unsigned delay_len=100000;
 		float* dbuf = new float[delay_len];
 		unsigned long dptr;
 		unsigned long n_distance;
+
+		//Default parameters
+		float initial_fb=0.3;
+		float initial_dry=1;
+		float initial_wet=0.2;
+		float initial_time=0.5;
 };
 
 

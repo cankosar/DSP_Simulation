@@ -31,6 +31,11 @@ void reverb::init(void){
 	inst_allpass[2].init(bufap1,sbuf_ap_3);
 	inst_allpass[3].init(bufap1,sbuf_ap_4);
 
+	//Initialize with default values
+	set_wet(&initial_wet);
+	set_size(&initial_size);
+	set_damp(&initial_damp);
+
 	//Resetting buffer
 	reset_buffer();
 
@@ -39,8 +44,20 @@ void reverb::init(void){
 
 void reverb::start(void){
 
+	//Start comb filters
+	unsigned i;
+	for(i=0;i<n_comb;i++){
+		inst_comb[i].start();
+	}
+
+	//Start allpass filters
+	for(i=0;i<n_allpass;i++){
+		inst_allpass[i].start();
+	}
+
 	//Set status
 	status=1;
+
 }
 
 void reverb::stop(void){
@@ -50,6 +67,17 @@ void reverb::stop(void){
 
 	//Fill the delay buffer with zeros
 	reset_buffer();
+
+	//Stop comb filters
+	unsigned i;
+	for(i=0;i<n_comb;i++){
+		inst_comb[i].stop();
+	}
+
+	//Stop allpass filters
+	for(i=0;i<n_allpass;i++){
+		inst_allpass[i].stop();
+	}
 }
 
 void reverb::reset_buffer(void){
@@ -75,33 +103,37 @@ void reverb::set_wet(float* w){
 
 }
 
-void reverb::set_size(float* w){
+void reverb::set_size(float* s){
 
 	//Scale and set feedback parameter
-	float feedback=(*w*scaleroom) + offsetroom;
+	float feedback;
 
-}
-
-void reverb::update(float* param_arr){
-
-
-
-	//Scale and set feedback parameter
-	float feedback=(param_arr[2]*scaleroom) + offsetroom;
-
-	//Scale and set damp
-	float damp=scaledamp*param_arr[3];
+	feedback=(*s*0.01*scaleroom) + offsetroom;
 
 	//Update the parameter of comb filters (Pointer on 2nd element: Roomsize)
 	unsigned i;
 	for(i=0;i<n_comb;i++){
-		inst_comb[i].update(feedback,damp);
+		inst_comb[i].set_feedback(&feedback);
 	}
 
 	//Update the parameter of allpass filters (Pointer on 2nd element: Roomsize)
 	for(i=0;i<n_allpass;i++){
-		inst_allpass[i].update(feedback);
+		inst_allpass[i].set_feedback(&feedback);
 	}
+
+}
+
+void reverb::set_damp(float* d){
+
+	//Scale and set damp
+	float damp=*d*0.01*scaledamp;
+
+	//Update the parameter of comb filters (Pointer on 2nd element: Roomsize)
+	unsigned i;
+	for(i=0;i<n_comb;i++){
+		inst_comb[i].set_damp(&damp);
+	}
+
 }
 
 

@@ -42,13 +42,10 @@ class dsp{
 		static const unsigned short c_rotary_bank=10;
 		static const unsigned short c_compressor_bank=11;
 
-		static const unsigned short c_overdrive_prefilter_id=3;
-		static const unsigned short c_overdrive_postfilter_id=4;
 
 	private:
-		const static unsigned short int n_biquad=5;
 		const static unsigned short int n_EQ=3;
-		biquad inst_biquad[n_biquad];
+		biquad inst_biquad[n_EQ];
 		delay inst_delay;
 		chorus inst_chorus;
 		overdrive inst_overdrive;

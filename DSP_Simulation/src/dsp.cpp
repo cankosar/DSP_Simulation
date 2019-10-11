@@ -13,22 +13,10 @@ void dsp::init(void){
 
 	//Initialize Biquad filters
 	unsigned short int i;
-	for(i=0;i<n_biquad;i++){
+	for(i=0;i<n_EQ;i++){
 		//Initialize
 		inst_biquad[i].init();
-		//Apply neutral filters
-		inst_biquad[i].apply_filter(0,0,1,1);	//Neutral filter
-
 	}
-
-	//Dummy EQ filter
-	inst_biquad[0].apply_filter(2,0,1000,1);
-	inst_biquad[1].apply_filter(3,0,200,1);
-	inst_biquad[2].apply_filter(4,0,5000,1);
-
-	//Overdrive filter
-	inst_biquad[3].apply_filter(1,0,300,1);
-	inst_biquad[4].apply_filter(0,0,4000,1);
 
 	//Initialize delay
 	inst_delay.init();
@@ -69,7 +57,7 @@ int dsp::process(int* x){
 
 		//Pass through compressor
 		if(inst_compressor.status){
-			y=inst_compressor.process_lg(y);
+			y=inst_compressor.process(y);
 		}
 
 		//Pass through the EQ section
@@ -101,18 +89,14 @@ int dsp::process(int* x){
 		}
 		//Pass through the overdrive
 		if(inst_overdrive.status){
-			y=inst_biquad[3].process(y);	//Pre filter
 			y=inst_overdrive.process(y);	//Overdrive
-			y=inst_biquad[4].process(y);	//Post filter
 		}
 
 		//Pass through reverb
 		if(inst_reverb.status){
 			y=inst_reverb.process(y);
 		}
-	}
-
-	if(inst_tuner.status){
+	}else if(inst_tuner.status){
 		inst_tuner.process(y);
 	}
 
@@ -131,7 +115,7 @@ void dsp::stop(void){
 
 	//Reset biquads
 	unsigned int i;
-	for(i=0;i<n_biquad;i++){
+	for(i=0;i<n_EQ;i++){
 		inst_biquad[i].stop();
 	}
 
@@ -148,14 +132,10 @@ void dsp::stop(void){
 	inst_reverb.stop();
 
 	//Reset tremolo
-	inst_tremolo.reset();
+	inst_tremolo.stop();
 
 	//Reset rotary
-	inst_rotary.reset();
-
-	//Reset status
-	status=0;
-
+	inst_rotary.stop();
 }
 
 void dsp::start(void){
@@ -166,9 +146,9 @@ void dsp::start(void){
 void dsp::update(void){
 
 	/*Here comes the update hash */
-
 	//Dummy hash
-	unsigned banks=0b000000000101;
+	unsigned banks=0b000100000001;
+
 
 	//General DSP bank
 	if(banks&(1<<c_dsp_bank)){
@@ -177,35 +157,17 @@ void dsp::update(void){
 		stop();
 	}
 
-	bool dsp_state_store=0;
 	//Tuner bank
 	if(banks&(1<<c_tuner_bank)){
-		//Store DSP state while entering tuner mode
-		dsp_state_store=status;
-
-		//Deactivate DSP bank
-		status=0;
-
-		//Reset all banks
+		//Stop DSP
 		stop();
-
-		//Activate tuner bank
-		inst_tuner.status=1;
+		inst_tuner.start();
 
 	}else{
-
-		//Deactivate tuner
-		inst_tuner.status=0;
-		if(inst_tuner.status){
-			inst_tuner.reset();
-		}
-
-		//Restore old dsp status
-		inst_tuner.status=dsp_state_store;
+		inst_tuner.stop();
+		//Start DSP
+		start();
 	}
-
-
-
 
 	//EQ banks
 	unsigned i;
@@ -235,12 +197,8 @@ void dsp::update(void){
 	//Overdrive bank
 	if(banks&(1<<(c_overdrive_bank))){
 		inst_overdrive.start();
-		inst_biquad[c_overdrive_prefilter_id].start();
-		inst_biquad[c_overdrive_postfilter_id].start();
 	}else{
 		inst_overdrive.stop();
-		inst_biquad[c_overdrive_prefilter_id].stop();
-		inst_biquad[c_overdrive_postfilter_id].stop();
 	}
 
 	//Reverb bank
@@ -250,24 +208,24 @@ void dsp::update(void){
 		inst_reverb.stop();
 	}
 
-//	//Tremolo bank
-//	if(banks&(1<<(c_tremolo_bank))){
-//		inst_tremolo.start();
-//	}else{
-//		inst_tremolo.stop();
-//	}
-//
-//	//Rotary bank
-//	if(banks&(1<<(c_rotary_bank))){
-//		inst_rotary.start();
-//	}else{
-//		inst_rotary.stop();
-//	}
-//
-//	//Compressor bank
-//	if(banks&(1<<(c_compressor_bank))){
-//		inst_compressor.start();
-//	}else{
-//		inst_compressor.stop();
-//	}
+	//Tremolo bank
+	if(banks&(1<<(c_tremolo_bank))){
+		inst_tremolo.start();
+	}else{
+		inst_tremolo.stop();
+	}
+
+	//Rotary bank
+	if(banks&(1<<(c_rotary_bank))){
+		inst_rotary.start();
+	}else{
+		inst_rotary.stop();
+	}
+
+	//Compressor bank
+	if(banks&(1<<(c_compressor_bank))){
+		inst_compressor.start();
+	}else{
+		inst_compressor.stop();
+	}
 }

@@ -29,14 +29,4 @@ const unsigned sbuf_comb_6		= 1491;
 const unsigned sbuf_comb_7		= 1557;
 const unsigned sbuf_comb_8		= 1617;
 
-//Initial values
-const float scaledamp		= 0.4f;
-const float scaleroom		= 0.28f;
-const float offsetroom		= 0.7f;
-const float initialroom		= 0.9f;
-const float initialdamp		= 0.5f;
-const float	fixedgain		= 0.01f;
-const float initialdry		= 1.0f;
-const float initialwet		= 0.5f;
-
 #endif /* INC_MODULES_REVERB_PARAMETERS_HPP_ */
