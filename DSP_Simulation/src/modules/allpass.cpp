@@ -11,9 +11,8 @@
 //#include "../../inc/constants.hpp"
 #include "../../inc/modules/allpass.hpp"
 #include "../../inc/modules/reverb_parameters.hpp"
-#include "../../inc/modules/denormals.h"
 
-void allpass::init(float* bufptr, unsigned size){
+void c_allpass::init(float* bufptr, unsigned size){
 
 	//Set the buffer to the incoming pointer
 	buffer=bufptr;
@@ -28,14 +27,14 @@ void allpass::init(float* bufptr, unsigned size){
 
 
 }
-void allpass::start(void){
+void c_allpass::start(void){
 
 	//Status set
 	status=1;
 
 }
 
-void allpass::stop(void){
+void c_allpass::stop(void){
 
 	//Status set
 	status=0;
@@ -45,13 +44,13 @@ void allpass::stop(void){
 
 }
 
-void allpass::reset(void){
+void c_allpass::reset(void){
 
 	//Fill the delay buffer with zeros
 	reset_buffer();
 }
 
-void allpass::reset_buffer(void){
+void c_allpass::reset_buffer(void){
 
 	//Fill the delay buffer with zeros
 	memset(buffer, 0, bufsize*sizeof(*buffer));
@@ -62,14 +61,14 @@ void allpass::reset_buffer(void){
 //	}
 }
 
-void allpass::set_feedback(float *fb){
+void c_allpass::set_feedback(float *fb){
 
 	feedback=*fb;
 
 }
 
 
-float allpass::process(float x){
+float c_allpass::process(float x){
 
 	float y;
 	float bufout;

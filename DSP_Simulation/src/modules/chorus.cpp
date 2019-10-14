@@ -12,7 +12,7 @@
 #include "../../inc/modules/chorus.hpp"
 
 
-void chorus::init(void){
+void c_chorus::init(void){
 
 	//Initialize parameters
 	set_wet(&initial_wet);
@@ -23,7 +23,7 @@ void chorus::init(void){
 	reset_buffer();
 }
 
-void chorus::stop(void){
+void c_chorus::stop(void){
 
 	//Status set
 	status=0;
@@ -33,27 +33,27 @@ void chorus::stop(void){
 
 }
 
-void chorus::start(void){
+void c_chorus::start(void){
 
 	//Status set
 	status=1;
 }
 
-void chorus::set_wet(float *w){
+void c_chorus::set_wet(float *w){
 	G_w=*w*0.01;
 	G_d=1-G_w;
 }
 
-void chorus::set_depth(float *d){
+void c_chorus::set_depth(float *d){
 	depth=*d*0.01;
 }
 
-void chorus::set_rate(float *r){
+void c_chorus::set_rate(float *r){
 	rate=*r;
 	a_step=(rate*2*PI)/(float)FS;
 }
 
-void chorus::reset_buffer(void){
+void c_chorus::reset_buffer(void){
 	//Fill the delay buffer with zeros
 	//The size of the float is 4
 
@@ -66,7 +66,7 @@ void chorus::reset_buffer(void){
 	a_lfo=0;
 }
 
-float chorus::process(float x){
+float c_chorus::process(float x){
 
 	float y;
 
@@ -100,7 +100,7 @@ float chorus::process(float x){
 }
 
 
-float chorus::get_current_delay(void){
+float c_chorus::get_current_delay(void){
 
 	//Calculate time
 	float t;
@@ -112,7 +112,7 @@ float chorus::get_current_delay(void){
 }
 
 
-float chorus::lfo(void){
+float c_chorus::lfo(void){
 
 	float y_lfo;
 

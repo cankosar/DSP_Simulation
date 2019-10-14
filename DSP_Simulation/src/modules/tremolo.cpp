@@ -12,7 +12,7 @@
 #include "../../inc/modules/tremolo.hpp"
 
 
-void tremolo::init(void){
+void c_tremolo::init(void){
 
 	//Tremolo parameter
 	set_depth(&initial_depth);
@@ -25,13 +25,13 @@ void tremolo::init(void){
 }
 
 
-void tremolo::start(void){
+void c_tremolo::start(void){
 
 	status=1;
 
 }
 
-void tremolo::stop(void){
+void c_tremolo::stop(void){
 
 	status=0;
 
@@ -39,25 +39,25 @@ void tremolo::stop(void){
 	i_lfo=0;
 }
 
-void tremolo::set_depth(float* d){
+void c_tremolo::set_depth(float* d){
 
 	depth=*d*0.01;
 
 }
 
-void tremolo::set_freq(float* f){
+void c_tremolo::set_freq(float* f){
 
 	frequency=*f;
 	update_step();
 }
 
-void tremolo::set_type(float *t){
+void c_tremolo::set_type(float *t){
 
 	type=(unsigned)*t;
 
 }
 
-void tremolo::update_step(void){
+void c_tremolo::update_step(void){
 
 	//Calculate algorithm parameters
 	t_step=frequency/FS;
@@ -68,21 +68,21 @@ void tremolo::update_step(void){
 
 
 
-float tremolo::process(float x){
+float c_tremolo::process(float x){
 
 	return x*get_current_attenuation();
 }
 
 
 
-float tremolo::get_current_attenuation(void){
+float c_tremolo::get_current_attenuation(void){
 
 	return 1-depth*lfo();
 
 }
 
 
-float tremolo::lfo(void){
+float c_tremolo::lfo(void){
 
 	float y_lfo;
 

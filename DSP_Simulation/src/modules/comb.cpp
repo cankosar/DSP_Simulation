@@ -9,9 +9,8 @@
 #include "string.h"
 #include "../../inc/modules/reverb_parameters.hpp"
 #include "../../inc/modules/comb.hpp"
-#include "../../inc/modules/denormals.h"
 
-void comb::init(float* bufptr, unsigned size){
+void c_comb::init(float* bufptr, unsigned size){
 
 	//Set the buffer to the incoming pointer
 	buffer=bufptr;
@@ -26,7 +25,7 @@ void comb::init(float* bufptr, unsigned size){
 
 }
 
-void comb::stop(void){
+void c_comb::stop(void){
 
 	//Status set
 	status=0;
@@ -35,7 +34,7 @@ void comb::stop(void){
 
 }
 
-void comb::start(void){
+void c_comb::start(void){
 
 	//Status set
 	status=1;
@@ -44,7 +43,7 @@ void comb::start(void){
 
 }
 
-void comb::reset(void){
+void c_comb::reset(void){
 
 	//Fill the delay buffer with zeros
 	reset_buffer();
@@ -52,7 +51,7 @@ void comb::reset(void){
 }
 
 
-void comb::reset_buffer(void){
+void c_comb::reset_buffer(void){
 
 	//Fill the delay buffer with zeros
 	memset(buffer, 0, bufsize*sizeof(*buffer));
@@ -63,14 +62,14 @@ void comb::reset_buffer(void){
 //	}
 }
 
-void comb::set_feedback(float* fb){
+void c_comb::set_feedback(float* fb){
 
 	//Scale and set feedback parameter
 	feedback=*fb;
 
 }
 
-void comb::set_damp(float *damp){
+void c_comb::set_damp(float *damp){
 
 	//Scale and set damp
 	damp1=*damp;
@@ -79,7 +78,7 @@ void comb::set_damp(float *damp){
 
 }
 
-float comb::process(float x){
+float c_comb::process(float x){
 
 	float y;
 

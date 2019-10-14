@@ -10,7 +10,7 @@
 #include "../../inc/modules/tuner.hpp"
 #include "../../inc/constants.hpp"
 
-void tuner::init(void){
+void c_tuner::init(void){
 
 	//Reset buffer
 	reset_buffer();
@@ -20,14 +20,14 @@ void tuner::init(void){
 
 }
 
-void tuner::start(void){
+void c_tuner::start(void){
 
 	//Set status
 	status=1;
 }
 
 
-void tuner::stop(void){
+void c_tuner::stop(void){
 
 	//Set status
 	status=0;
@@ -39,7 +39,7 @@ void tuner::stop(void){
 
 }
 
-void tuner::reset_buffer(void){
+void c_tuner::reset_buffer(void){
 
 	//Reset the main buffer
 	memset(buffer, 0, bufsize*sizeof(*buffer));
@@ -57,7 +57,7 @@ void tuner::reset_buffer(void){
 
 }
 
-void tuner::process(float x){
+void c_tuner::process(float x){
 
 //	printf("tptr:%d\n",tptr);
 
@@ -76,7 +76,7 @@ void tuner::process(float x){
 }
 
 
-void tuner::detect_pitch(void){
+void c_tuner::detect_pitch(void){
 
 	//Declare and initialize variables
 	unsigned long i=0;
@@ -101,7 +101,7 @@ void tuner::detect_pitch(void){
 }
 
 
-float tuner::calc_ac(unsigned dist){
+float c_tuner::calc_ac(unsigned dist){
 
 	unsigned i=0;
 	float ac_score;
@@ -128,7 +128,7 @@ float tuner::calc_ac(unsigned dist){
 	return ac_score;
 }
 
-void tuner::find_peaks(void){
+void c_tuner::find_peaks(void){
 
 	p1=0;
 	p2=0;
@@ -161,7 +161,7 @@ void tuner::find_peaks(void){
 
 }
 
-unsigned tuner::get_exact_peak_linear(unsigned index){
+unsigned c_tuner::get_exact_peak_linear(unsigned index){
 
 
 	unsigned dist=note_bins[index];
@@ -212,7 +212,7 @@ unsigned tuner::get_exact_peak_linear(unsigned index){
 
 
 /*This function uses methods of stochastics to estimate the frequency*/
-void tuner::estimate_freq(void){
+void c_tuner::estimate_freq(void){
 
 	float ma;					//Value of moving average
 	float minimum, maximum;		//Minimum and maximum values of one array

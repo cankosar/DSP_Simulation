@@ -12,7 +12,7 @@
 #include "allpass.hpp"
 #include "reverb_parameters.hpp"
 
-class reverb{
+class c_reverb{
 
 	public:
 		//Methods
@@ -61,8 +61,8 @@ class reverb{
 		float initial_wet	= 60.0f;
 
 		//Instances
-		comb inst_comb[n_comb];
-		allpass inst_allpass[n_allpass];
+		c_comb comb[n_comb];
+		c_allpass allpass[n_allpass];
 
 		//Parameter
 		float drymix;

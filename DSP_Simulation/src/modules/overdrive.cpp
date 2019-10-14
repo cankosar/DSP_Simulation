@@ -9,18 +9,18 @@
 #include "../../inc/modules/overdrive.hpp"
 
 
-void overdrive::init(void){
+void c_overdrive::init(void){
 
 	set_gain(&initial_gain);
-	set_HP_freq(&initial_HP_freq);
-	set_LP_freq(&initial_LP_freq);
+
+	init_biquad_filters();
 
 	//Init intermediate parameters
 	downscaler=1/upscaler;
 
 }
 
-void overdrive::start(void){
+void c_overdrive::start(void){
 
 	//Start filters
 	pre_filter.start();
@@ -30,7 +30,7 @@ void overdrive::start(void){
 	status=1;
 }
 
-void overdrive::stop(void){
+void c_overdrive::stop(void){
 
 	//Set status
 	status=0;
@@ -40,25 +40,42 @@ void overdrive::stop(void){
 	post_filter.stop();
 }
 
-void overdrive::set_gain(float *g){
+void c_overdrive::init_biquad_filters(void){
+
+	//Initialize prefilter (Highpass)
+	pre_filter.set_filter_type(1);	//High pass
+	pre_filter.set_gain(0);
+	pre_filter.set_freq(initial_HP_freq);
+	pre_filter.set_quality(1);
+
+	//Initialize prefilter (Low pass)
+	post_filter.set_filter_type(0);	//Low pass
+	post_filter.set_gain(0);
+	post_filter.set_freq(initial_LP_freq);
+	post_filter.set_quality(1);
+
+}
+
+void c_overdrive::set_gain(float *g){
 
 	gain=*g;
 
 }
 
-void overdrive::set_HP_freq(float *f){
+void c_overdrive::set_HP_freq(float *f){
 
-	pre_filter.apply_filter(1,0,*f,1);
+	pre_filter.set_freq(*f);
 
-}
-
-void overdrive::set_LP_freq(float *f){
-
-	post_filter.apply_filter(0,0,*f,1);
 
 }
 
-float overdrive::process(float x){
+void c_overdrive::set_LP_freq(float *f){
+
+	post_filter.set_freq(*f);
+
+}
+
+float c_overdrive::process(float x){
 
 	float y;
 

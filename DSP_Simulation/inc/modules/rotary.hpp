@@ -8,7 +8,7 @@
 #ifndef INC_MODULES_ROTARY_HPP_
 #define INC_MODULES_ROTARY_HPP_
 
-class rotary{
+class c_rotary{
 
 	public:
 

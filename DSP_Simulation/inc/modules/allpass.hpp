@@ -8,7 +8,7 @@
 #ifndef INC_MODULES_ALLPASS_HPP_
 #define INC_MODULES_ALLPASS_HPP_
 
-class allpass{
+class c_allpass{
 
 	public:
 		//Methods

@@ -8,7 +8,7 @@
 #ifndef INC_MODULES_CHORUS_HPP_
 #define INC_MODULES_CHORUS_HPP_
 
-class chorus{
+class c_chorus{
 
 	public:
 

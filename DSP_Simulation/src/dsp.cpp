@@ -15,32 +15,32 @@ void dsp::init(void){
 	unsigned short int i;
 	for(i=0;i<n_EQ;i++){
 		//Initialize
-		inst_biquad[i].init();
+		biquad[i].init();
 	}
 
 	//Initialize delay
-	inst_delay.init();
+	delay.init();
 
 	//Initialize chorus
-	inst_chorus.init();
+	chorus.init();
 
 	//Initialize overdrive
-	inst_overdrive.init();
+	overdrive.init();
 
 	//Initialize reverb
-	inst_reverb.init();
+	reverb.init();
 
 	//Initialize tuner
-	inst_tuner.init();
+	tuner.init();
 
 	//Initialize tremolo
-	inst_tremolo.init();
+	tremolo.init();
 
 	//Initialize rotary
-	inst_rotary.init();
+	rotary.init();
 
 	//Initialize rotary
-	inst_compressor.init();
+	compressor.init();
 
 	//Set status
 	status=1;
@@ -56,48 +56,48 @@ int dsp::process(int* x){
 	if(status){
 
 		//Pass through compressor
-		if(inst_compressor.status){
-			y=inst_compressor.process(y);
+		if(compressor.status){
+			y=compressor.process(y);
 		}
 
 		//Pass through the EQ section
 		unsigned short i;
 		for(i=0;i<n_EQ;i++){
-			if(inst_biquad[i].status){
-				y=inst_biquad[i].process(y);
+			if(biquad[i].status){
+				y=biquad[i].process(y);
 			}
 		}
 
 		//Pass through delay
-		if(inst_delay.status){
-			y=inst_delay.process(y);
+		if(delay.status){
+			y=delay.process(y);
 		}
 
 		//Pass through chorus
-		if(inst_chorus.status){
-			y=inst_chorus.process(y);
+		if(chorus.status){
+			y=chorus.process(y);
 		}
 
 		//Pass through rotary
-		if(inst_rotary.status){
-			y=inst_rotary.process(y);
+		if(rotary.status){
+			y=rotary.process(y);
 		}
 
 		//Pass through tremolo
-		if(inst_tremolo.status){
-			y=inst_tremolo.process(y);
+		if(tremolo.status){
+			y=tremolo.process(y);
 		}
 		//Pass through the overdrive
-		if(inst_overdrive.status){
-			y=inst_overdrive.process(y);	//Overdrive
+		if(overdrive.status){
+			y=overdrive.process(y);	//Overdrive
 		}
 
 		//Pass through reverb
-		if(inst_reverb.status){
-			y=inst_reverb.process(y);
+		if(reverb.status){
+			y=reverb.process(y);
 		}
-	}else if(inst_tuner.status){
-		inst_tuner.process(y);
+	}else if(tuner.status){
+		tuner.process(y);
 	}
 
 	//Convert to int and return
@@ -116,26 +116,26 @@ void dsp::stop(void){
 	//Reset biquads
 	unsigned int i;
 	for(i=0;i<n_EQ;i++){
-		inst_biquad[i].stop();
+		biquad[i].stop();
 	}
 
 	//Reset delay
-	inst_delay.stop();
+	delay.stop();
 
 	//Reset chorus
-	inst_chorus.stop();
+	chorus.stop();
 
 	//Reset overdrive
-	inst_overdrive.stop();
+	overdrive.stop();
 
 	//Reset reverb
-	inst_reverb.stop();
+	reverb.stop();
 
 	//Reset tremolo
-	inst_tremolo.stop();
+	tremolo.stop();
 
 	//Reset rotary
-	inst_rotary.stop();
+	rotary.stop();
 }
 
 void dsp::start(void){
@@ -161,10 +161,10 @@ void dsp::update(void){
 	if(banks&(1<<c_tuner_bank)){
 		//Stop DSP
 		stop();
-		inst_tuner.start();
+		tuner.start();
 
 	}else{
-		inst_tuner.stop();
+		tuner.stop();
 		//Start DSP
 		start();
 	}
@@ -174,58 +174,58 @@ void dsp::update(void){
 	for(i=0;i<n_EQ;i++){
 		//EQ banks
 		if(banks&(1<<(i+c_EQ_bank))){
-			inst_biquad[i].start();
+			biquad[i].start();
 		}else{
-			inst_biquad[i].stop();
+			biquad[i].stop();
 		}
 	}
 
 	//Delay bank
 	if(banks&(1<<(c_delay_bank))){
-		inst_delay.start();
+		delay.start();
 	}else{
-		inst_delay.stop();
+		delay.stop();
 	}
 
 	//Chorus bank
 	if(banks&(1<<(c_chorus_bank))){
-		inst_chorus.start();
+		chorus.start();
 	}else{
-		inst_chorus.stop();
+		chorus.stop();
 	}
 
 	//Overdrive bank
 	if(banks&(1<<(c_overdrive_bank))){
-		inst_overdrive.start();
+		overdrive.start();
 	}else{
-		inst_overdrive.stop();
+		overdrive.stop();
 	}
 
 	//Reverb bank
 	if(banks&(1<<(c_reverb_bank))){
-		inst_reverb.start();
+		reverb.start();
 	}else{
-		inst_reverb.stop();
+		reverb.stop();
 	}
 
 	//Tremolo bank
 	if(banks&(1<<(c_tremolo_bank))){
-		inst_tremolo.start();
+		tremolo.start();
 	}else{
-		inst_tremolo.stop();
+		tremolo.stop();
 	}
 
 	//Rotary bank
 	if(banks&(1<<(c_rotary_bank))){
-		inst_rotary.start();
+		rotary.start();
 	}else{
-		inst_rotary.stop();
+		rotary.stop();
 	}
 
 	//Compressor bank
 	if(banks&(1<<(c_compressor_bank))){
-		inst_compressor.start();
+		compressor.start();
 	}else{
-		inst_compressor.stop();
+		compressor.stop();
 	}
 }

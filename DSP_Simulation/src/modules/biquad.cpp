@@ -11,14 +11,13 @@
 #include "stdio.h"
 
 
-void biquad::init(void){
+void c_biquad::init(void){
 
 	//Set initial parameters
-	set_param(&initial_param[0],
-				&initial_param[1],
-				&initial_param[2],
-				&initial_param[3],
-				&initial_param[4]);
+	set_filter_type(initial_type);
+	set_gain(initial_gain);
+	set_freq(initial_freq);
+	set_quality(initial_quality);
 
 	//Initial reset of buffer
 	reset_buffer();
@@ -26,7 +25,7 @@ void biquad::init(void){
 
 }
 
-void biquad::reset_buffer(void){
+void c_biquad::reset_buffer(void){
 
 	//Reset memory
 	x1=0;
@@ -36,23 +35,58 @@ void biquad::reset_buffer(void){
 
 }
 
-void biquad::start(void){
+void c_biquad::start(void){
 	status=1;
 }
 
-void biquad::stop(void){
+void c_biquad::stop(void){
 
 	status=0;
 	reset_buffer();
 }
 
+void c_biquad::set_filter_type(short unsigned t){
 
-void biquad::apply_filter(unsigned short type, float g, float f0, float Q){
+	//Set type
+	type=t;
+
+	//Update biquad parameters
+	update_param();
+}
+
+void c_biquad::set_gain(float g){
+
+	//Set gain
+	gain=g;
+
+	//Update biquad parameters
+	update_param();
+}
+
+void c_biquad::set_freq(float f){
+
+	//Set frequency
+	f0=f;
+
+	//Update biquad parameters
+	update_param();
+}
+
+void c_biquad::set_quality(float q){
+
+	//Set quality
+	Q=q;
+
+	//Update biquad parameters
+	update_param();
+}
+
+void c_biquad::update_param(void){
 
 
 	double A,w0,cosw0,sinw0,alpha,a0;
 	//Intermediate vars
-	A=pow(10,g/40);
+	A=pow(10,gain/40);
 	w0=2*PI*(f0/FS);
 	cosw0=cos(w0);
 	sinw0=sin(w0);
@@ -118,7 +152,7 @@ void biquad::apply_filter(unsigned short type, float g, float f0, float Q){
 }
 
 
-void biquad::set_param(float *b0, float *b1, float *b2, float *a0, float *a1){
+void c_biquad::set_param(float *b0, float *b1, float *b2, float *a0, float *a1){
 
 	//Set parameter
 	param[0]=*b0;
@@ -128,7 +162,7 @@ void biquad::set_param(float *b0, float *b1, float *b2, float *a0, float *a1){
 	param[4]=*a1;
 }
 
-float biquad::process(float x){
+float c_biquad::process(float x){
 
 	//Process biquad filter
 	y=

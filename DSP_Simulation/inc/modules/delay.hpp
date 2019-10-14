@@ -9,7 +9,7 @@
 #define INC_MODULES_DELAY_HPP_
 
 
-class delay{
+class c_delay{
 
 	public:
 		//Methods

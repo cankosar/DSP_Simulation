@@ -8,7 +8,7 @@
 #ifndef INC_MODULES_TUNER_HPP_
 #define INC_MODULES_TUNER_HPP_
 
-class tuner{
+class c_tuner{
 
 	public:
 		//Methods

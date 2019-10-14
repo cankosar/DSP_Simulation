@@ -8,7 +8,7 @@
 #ifndef INC_MODULES_COMPRESSOR_HPP_
 #define INC_MODULES_COMPRESSOR_HPP_
 
-class compressor{
+class c_compressor{
 
 	public:
 

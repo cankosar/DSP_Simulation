@@ -45,15 +45,15 @@ class dsp{
 
 	private:
 		const static unsigned short int n_EQ=3;
-		biquad inst_biquad[n_EQ];
-		delay inst_delay;
-		chorus inst_chorus;
-		overdrive inst_overdrive;
-		reverb inst_reverb;
-		tuner inst_tuner;
-		tremolo inst_tremolo;
-		rotary inst_rotary;
-		compressor inst_compressor;
+		c_biquad biquad[n_EQ];
+		c_delay delay;
+		c_chorus chorus;
+		c_overdrive overdrive;
+		c_reverb reverb;
+		c_tuner tuner;
+		c_tremolo tremolo;
+		c_rotary rotary;
+		c_compressor compressor;
 };
 
 

@@ -8,7 +8,7 @@
 #ifndef INC_MODULES_TREMOLO_HPP_
 #define INC_MODULES_TREMOLO_HPP_
 
-class tremolo{
+class c_tremolo{
 
 	public:
 

@@ -8,7 +8,7 @@
 #ifndef INC_MODULES_COMB_HPP_
 #define INC_MODULES_COMB_HPP_
 
-class comb{
+class c_comb{
 
 		public:
 		//Methods

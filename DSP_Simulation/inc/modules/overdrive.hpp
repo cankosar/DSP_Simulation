@@ -10,7 +10,7 @@
 
 #include "biquad.hpp"
 
-class overdrive{
+class c_overdrive{
 
 	public:
 		//Methods
@@ -21,6 +21,7 @@ class overdrive{
 		void set_gain(float *g);
 		void set_HP_freq(float *f);
 		void set_LP_freq(float *f);
+		void init_biquad_filters(void);
 
 		//Variables
 		bool status;
@@ -38,8 +39,8 @@ class overdrive{
 
 
 
-		biquad pre_filter;
-		biquad post_filter;
+		c_biquad pre_filter;
+		c_biquad post_filter;
 
 };
 

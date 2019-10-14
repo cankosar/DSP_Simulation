@@ -12,7 +12,7 @@
 #include "../../inc/modules/compressor.hpp"
 
 
-void compressor::init(void){
+void c_compressor::init(void){
 
 	//Initialize parameter
 	set_threshold(&initial_threshold);
@@ -27,13 +27,13 @@ void compressor::init(void){
 	reset_buffer();
 }
 
-void compressor::start(void){
+void c_compressor::start(void){
 
 	//Set status
 	status=1;
 }
 
-void compressor::stop(void){
+void c_compressor::stop(void){
 
 	//Set status
 	status=0;
@@ -42,7 +42,7 @@ void compressor::stop(void){
 	reset_buffer();
 }
 
-void compressor::set_threshold(float* t){
+void c_compressor::set_threshold(float* t){
 
 	//2^15 is the max value of int16
 	//Multiplicating by 0.1666 is an approximation of conversion from log2 to log10
@@ -51,7 +51,7 @@ void compressor::set_threshold(float* t){
 
 }
 
-void compressor::set_ratio(float* r){
+void c_compressor::set_ratio(float* r){
 
 	//Set ratio
 	ratio=*r;
@@ -63,7 +63,7 @@ void compressor::set_ratio(float* r){
 
 }
 
-void compressor::set_attack(float* a){
+void c_compressor::set_attack(float* a){
 
 	//Set attack
 	t_attack=*a;
@@ -79,7 +79,7 @@ void compressor::set_attack(float* a){
 }
 
 
-void compressor::reset_buffer(void){
+void c_compressor::reset_buffer(void){
 	//Fill the delay buffer with zeros
 	//The size of the float is 4
 
@@ -96,7 +96,7 @@ void compressor::reset_buffer(void){
 
 }
 
-float compressor::process(float x){
+float c_compressor::process(float x){
 
 //	x*=input_gain;
 	//Calculate RMS

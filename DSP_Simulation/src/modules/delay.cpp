@@ -10,7 +10,7 @@
 #include "../../inc/constants.hpp"
 #include "../../inc/modules/delay.hpp"
 
-void delay::init(void){
+void c_delay::init(void){
 
 	//Set parameters
 	set_wet(&initial_wet);
@@ -23,7 +23,7 @@ void delay::init(void){
 
 }
 
-void delay::reset_buffer(void){
+void c_delay::reset_buffer(void){
 	//Fill the delay buffer with zeros
 
 	memset(dbuf, 0, delay_max*sizeof(*dbuf));
@@ -32,19 +32,19 @@ void delay::reset_buffer(void){
 	dptr=0;
 }
 
-void delay::set_wet(float *wet){
+void c_delay::set_wet(float *wet){
 
 	G_w=*wet*0.01;
 
 }
 
-void delay::set_dry(float *dry){
+void c_delay::set_dry(float *dry){
 
 	G_d=*dry*0.01;
 
 }
 
-void delay::set_time(float *time){
+void c_delay::set_time(float *time){
 
 	delay_time=*time*0.001;		//Should be unnecessary
 	n_distance=(unsigned long)(*time*FSms);
@@ -58,26 +58,26 @@ void delay::set_time(float *time){
 
 }
 
-void delay::set_feedback(float* fb){
+void c_delay::set_feedback(float* fb){
 
 	G_fb=*fb*0.009;		//Max value: 0.9 for stability reasons
 
 }
 
-void delay::start(void){
+void c_delay::start(void){
 
 	status=1;
 
 }
 
-void delay::stop(void){
+void c_delay::stop(void){
 
 	status=0;
 	reset_buffer();
 
 }
 
-float delay::process(float x){
+float c_delay::process(float x){
 
 	float y;
 

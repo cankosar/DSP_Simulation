@@ -12,7 +12,7 @@
 #include "../../inc/modules/rotary.hpp"
 
 
-void rotary::init(void){
+void c_rotary::init(void){
 
 	//Set initial parameters
 	set_depth(&initial_depth);
@@ -28,19 +28,19 @@ void rotary::init(void){
 	a_lfo=0;
 }
 
-void rotary::update_step(void){
+void c_rotary::update_step(void){
 
 	//Angle step
 	a_step=(freq*2*PI)/(FS);
 }
 
-void rotary::start(void){
+void c_rotary::start(void){
 
 	//Set status
 	status=1;
 }
 
-void rotary::stop(void){
+void c_rotary::stop(void){
 
 	//Set status
 	status=0;
@@ -55,26 +55,26 @@ void rotary::stop(void){
 	a_lfo=0;
 }
 
-void rotary::reset_buffer(void){
+void c_rotary::reset_buffer(void){
 	//Fill the delay buffer with zeros
 	//The size of the float is 4
 
 	memset(rbuf, 0, rotary_len*sizeof(*rbuf));
 }
 
-void rotary::set_depth(float* d){
+void c_rotary::set_depth(float* d){
 
 	depth=*d*0.01;
 }
 
-void rotary::set_freq(float* f){
+void c_rotary::set_freq(float* f){
 
 	freq=*f;
 	update_step();
 }
 
 
-float rotary::process(float x){
+float c_rotary::process(float x){
 
 	float y;
 
@@ -110,7 +110,7 @@ float rotary::process(float x){
 }
 
 
-float rotary::get_current_delay(void){
+float c_rotary::get_current_delay(void){
 
 	//Calculate time
 	float t;
@@ -122,7 +122,7 @@ float rotary::get_current_delay(void){
 }
 
 
-float rotary::lfo(void){
+float c_rotary::lfo(void){
 
 	float y_lfo;
 
