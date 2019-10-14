@@ -36,16 +36,16 @@ class delay{
 		float delay_time; 	//Delay time in seconds
 
 		//Buffers
-		static const unsigned delay_len=100000;
-		float* dbuf = new float[delay_len];
+		static const unsigned delay_max=100000;
+		float* dbuf = new float[delay_max];
 		unsigned long dptr;
 		unsigned long n_distance;
 
 		//Default parameters
-		float initial_fb=0.3;
-		float initial_dry=1;
-		float initial_wet=0.2;
-		float initial_time=0.5;
+		float initial_fb=50;
+		float initial_dry=100;
+		float initial_wet=20;
+		float initial_time=300;
 };
 
 

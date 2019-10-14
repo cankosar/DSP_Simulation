@@ -26,7 +26,7 @@ void delay::init(void){
 void delay::reset_buffer(void){
 	//Fill the delay buffer with zeros
 
-	memset(dbuf, 0, delay_len*sizeof(*dbuf));
+	memset(dbuf, 0, delay_max*sizeof(*dbuf));
 
 	//Delay array pointer
 	dptr=0;
@@ -48,6 +48,13 @@ void delay::set_time(float *time){
 
 	delay_time=*time*0.001;		//Should be unnecessary
 	n_distance=(unsigned long)(*time*FSms);
+
+	//Security for delay length
+	if(n_distance>delay_max){
+		n_distance=delay_max;
+	}
+
+	reset_buffer();
 
 }
 
@@ -77,21 +84,14 @@ float delay::process(float x){
 	//Calculate output
 	y=dbuf[dptr]*G_w+x*G_d;
 
-	//Calculate update pointer
-	long int wptr;	//Write pointer
-	wptr=dptr-n_distance;
-	if(wptr<0){
-		wptr+=delay_len;
-	}
-
 	//Update buffer
-	dbuf[wptr]=x+dbuf[dptr]*G_fb;
+	dbuf[dptr]=x+dbuf[dptr]*G_fb;
 
 	//Increment pointer
 	dptr++;
 
-	if(dptr>=delay_len){
-		dptr-=delay_len;
+	if(dptr>=n_distance){
+		dptr=0;
 	}
 
 
