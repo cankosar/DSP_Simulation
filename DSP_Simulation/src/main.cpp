@@ -11,7 +11,7 @@ int main(void) {
 
 	//Initialize
 	printf("Initializing\n");
-	inst_ser.start();
+	inst_ser.init();
 
 	//Set the input&output files
 	inst_ser.inst_wav.input_file= "samples/Guitar_Rythm_dry_16bit_mono.wav";
@@ -21,7 +21,7 @@ int main(void) {
 	inst_ser.inst_wav.read_wav();
 
 	//Process
-	printf("Processing neu\n");
+	printf("Processing\n");
 	inst_ser.process();
 
 	//Finish and write the output file
