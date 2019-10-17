@@ -10,6 +10,7 @@ int main(void) {
 	ser_deser inst_ser;
 
 	//Initialize
+	printf("Hallo Änderung");
 	printf("Initializing\n");
 	inst_ser.start();
 
