@@ -10,9 +10,9 @@ int main(void) {
 	ser_deser inst_ser;
 
 	//Initialize
-	printf("Hallo Änderung");
+	printf("Hallo Aederung");
 	printf("Initializing\n");
-	inst_ser.start();
+	inst_ser.start();			//Hier passiert was
 
 	//Set the input&output files
 	inst_ser.inst_wav.input_file= "samples/Guitar_Rythm_dry_16bit_mono.wav";
