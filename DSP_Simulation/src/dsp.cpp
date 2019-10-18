@@ -42,6 +42,9 @@ void dsp::init(void){
 	//Initialize rotary
 	compressor.init();
 
+	//Initialize flanger
+	flanger.init();
+
 	//Set status
 	status=1;
 
@@ -87,6 +90,12 @@ int dsp::process(int* x){
 		if(tremolo.status){
 			y=tremolo.process(y);
 		}
+
+		//Pass through flanger
+		if(flanger.status){
+			y=flanger.process(y);
+		}
+
 		//Pass through the overdrive
 		if(overdrive.status){
 			y=overdrive.process(y);	//Overdrive
@@ -136,6 +145,9 @@ void dsp::stop(void){
 
 	//Reset rotary
 	rotary.stop();
+
+	//Reset flanger
+	flanger.stop();
 }
 
 void dsp::start(void){
@@ -147,7 +159,7 @@ void dsp::update(void){
 
 	/*Here comes the update hash */
 	//Dummy hash
-	unsigned banks=0b000100100001;
+	unsigned banks=0b1000000000001;
 
 
 	//General DSP bank
@@ -220,6 +232,13 @@ void dsp::update(void){
 		rotary.start();
 	}else{
 		rotary.stop();
+	}
+
+	//Flanger bank
+	if(banks&(1<<(c_flanger_bank))){
+		flanger.start();
+	}else{
+		flanger.stop();
 	}
 
 	//Compressor bank

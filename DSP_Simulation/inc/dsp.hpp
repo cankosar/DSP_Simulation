@@ -16,7 +16,9 @@
 #include "../inc/modules/tuner.hpp"
 #include "../inc/modules/tremolo.hpp"
 #include "../inc/modules/rotary.hpp"
+#include "../inc/modules/flanger.hpp"
 #include "../inc/modules/compressor.hpp"
+
 
 class dsp{
 	public:
@@ -41,6 +43,7 @@ class dsp{
 		static const unsigned short c_tremolo_bank=9;
 		static const unsigned short c_rotary_bank=10;
 		static const unsigned short c_compressor_bank=11;
+		static const unsigned short c_flanger_bank=12;
 
 
 	private:
@@ -54,6 +57,7 @@ class dsp{
 		c_tremolo tremolo;
 		c_rotary rotary;
 		c_compressor compressor;
+		c_flanger flanger;
 };
 
 
