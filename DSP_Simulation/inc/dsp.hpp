@@ -17,6 +17,7 @@
 #include "../inc/modules/tremolo.hpp"
 #include "../inc/modules/rotary.hpp"
 #include "../inc/modules/flanger.hpp"
+#include "../inc/modules/autowah.hpp"
 #include "../inc/modules/compressor.hpp"
 
 
@@ -44,6 +45,7 @@ class dsp{
 		static const unsigned short c_rotary_bank=10;
 		static const unsigned short c_compressor_bank=11;
 		static const unsigned short c_flanger_bank=12;
+		static const unsigned short c_autowah_bank=13;
 
 
 	private:
@@ -58,6 +60,7 @@ class dsp{
 		c_rotary rotary;
 		c_compressor compressor;
 		c_flanger flanger;
+		c_autowah autowah;
 };
 
 

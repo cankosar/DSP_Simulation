@@ -45,6 +45,9 @@ void dsp::init(void){
 	//Initialize flanger
 	flanger.init();
 
+	//Initialize autowah
+	autowah.init();
+
 	//Set status
 	status=1;
 
@@ -94,6 +97,11 @@ int dsp::process(int* x){
 		//Pass through flanger
 		if(flanger.status){
 			y=flanger.process(y);
+		}
+
+		//Pass through flanger
+		if(autowah.status){
+			y=autowah.process(y);
 		}
 
 		//Pass through the overdrive
@@ -148,6 +156,9 @@ void dsp::stop(void){
 
 	//Reset flanger
 	flanger.stop();
+
+	//Autowah flanger
+	autowah.stop();
 }
 
 void dsp::start(void){
@@ -159,7 +170,7 @@ void dsp::update(void){
 
 	/*Here comes the update hash */
 	//Dummy hash
-	unsigned banks=0b1000000000001;
+	unsigned banks=0b10000000000001;
 
 
 	//General DSP bank
@@ -235,6 +246,13 @@ void dsp::update(void){
 	}
 
 	//Flanger bank
+	if(banks&(1<<(c_autowah_bank))){
+		autowah.start();
+	}else{
+		autowah.stop();
+	}
+
+	//Autowah bank
 	if(banks&(1<<(c_flanger_bank))){
 		flanger.start();
 	}else{

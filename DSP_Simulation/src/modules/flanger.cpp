@@ -8,14 +8,15 @@
 #include "stdio.h"
 #include "string.h"
 #include "math.h"
-#include "../../inc/constants.hpp"
+
 #include "../../inc/modules/flanger.hpp"
 
 
 void c_flanger::init(void){
 
 	//Initialize parameters
-//	set_wet(&initial_wet);
+	set_wet(&initial_wet);
+	set_wet(&initial_feedback);
 	set_depth(&initial_depth);
 	set_rate(&initial_rate);
 
@@ -39,13 +40,17 @@ void c_flanger::start(void){
 	status=1;
 }
 
-//void c_flanger::set_wet(float *w){
-//	G_w=*w*0.01;
-//	G_d=1-G_w;
-//}
+void c_flanger::set_feedback(float *fb){
+	G_fb=*fb*0.0091;
+}
+
+void c_flanger::set_wet(float *w){
+	G_w=*w*0.01;
+	G_d=1-G_w;
+}
 
 void c_flanger::set_depth(float *d){
-	depth=*d*0.01;
+	depth=*d*0.03;
 }
 
 void c_flanger::set_rate(float *r){
@@ -58,9 +63,13 @@ void c_flanger::reset_buffer(void){
 	//The size of the float is 4
 
 	memset(fbuf, 0, flanger_len*sizeof(*fbuf));
+	memset(drybuf, 0, l_drybuf*sizeof(*drybuf));
 
 	//Chorus pointer
 	fptr=0;
+
+	//Dry pointer
+	dryptr=0,
 
 	//Current angle of LFO
 	a_lfo=0;
@@ -85,15 +94,54 @@ float c_flanger::process(float x){
 	}
 
 	//Calculate output
-	y=G_d*x + G_w*fbuf[wptr];
+	y=G_d*drybuf[dryptr] + G_w*fbuf[wptr];
 
 	//Update the buffer
-	fbuf[fptr]=x;
+	fbuf[fptr]=x+G_fb*fbuf[wptr];
+	drybuf[dryptr]=x;
 
 	//Increment
 	fptr++;
 	if(fptr>=flanger_len){
-		fptr-=flanger_len;
+		fptr=0;
+	}
+
+	dryptr++;
+	if(dryptr>=l_drybuf){
+		dryptr=0;
+	}
+
+	return y;
+}
+
+float c_flanger::process_nondelay(float x){
+
+	float y;
+
+	float t_c;	//Current delay
+
+	//Get tap distance
+	t_c=get_current_delay(); //Tap distance
+
+	//Calculate the position of the pointer
+	int wptr;
+
+	wptr=fptr-lrint(t_c*FSms);
+
+	if(wptr<0){
+		wptr+=flanger_len;
+	}
+
+	//Calculate output
+	y=G_d*x + G_w*fbuf[wptr];
+
+	//Update the buffer
+	fbuf[fptr]=x+G_fb*fbuf[wptr];
+
+	//Increment
+	fptr++;
+	if(fptr>=flanger_len){
+		fptr=0;
 	}
 
 	return y;
@@ -104,7 +152,7 @@ float c_flanger::get_current_delay(void){
 
 	//Calculate time
 	float t;
-	t=d_base+depth*lfo();
+	t=(float)d_base+depth*lfo();
 
 	//Return the delay time
 	return t;
