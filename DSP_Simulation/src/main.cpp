@@ -15,8 +15,11 @@ int main(void) {
   inst_ser.init();
 
 	//Set the input&output files
-	inst_ser.inst_wav.input_file= "samples/Guitar_Rythm_dry_16bit_mono.wav";
-	inst_ser.inst_wav.output_file= "samples/Guitar_Rythm_16bit_processed.wav";
+//	inst_ser.inst_wav.input_file= "samples/Guitar_Rythm_dry_16bit_mono.wav";
+//	inst_ser.inst_wav.output_file= "samples/Guitar_Rythm_16bit_processed.wav";
+
+	inst_ser.inst_wav.input_file="samples/strings/Guitar_E2.wav";
+	inst_ser.inst_wav.output_file="samples/strings/Guitar_E2_processed.wav";
 
 	//Read wave file
 	inst_ser.inst_wav.read_wav();

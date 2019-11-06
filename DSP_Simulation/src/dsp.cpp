@@ -12,11 +12,17 @@
 void dsp::init(void){
 
 	//Initialize Biquad filters
-	unsigned short int i;
-	for(i=0;i<n_EQ;i++){
-		//Initialize
-		biquad[i].init();
-	}
+	lowshelf.init();
+	lowshelf.set_filter_type(3);
+	lowshelf.set_freq(100);
+	lowshelf.set_gain(0);
+	lowshelf.set_quality(1);
+
+	highshelf.init();
+	highshelf.set_filter_type(4);
+	highshelf.set_freq(5000);
+	highshelf.set_gain(0);
+	highshelf.set_quality(1);
 
 	//Initialize delay
 	delay.init();
@@ -61,18 +67,20 @@ int dsp::process(int* x){
 	//Main routine: Check the status of the components and feed them
 	if(status){
 
+		//Pass through the EQ
+		if(lowshelf.status){
+			y=lowshelf.process(y);
+		}
+
+		if(highshelf.status){
+			y=highshelf.process(y);
+		}
+
 		//Pass through compressor
 		if(compressor.status){
 			y=compressor.process(y);
 		}
 
-		//Pass through the EQ section
-		unsigned short i;
-		for(i=0;i<n_EQ;i++){
-			if(biquad[i].status){
-				y=biquad[i].process(y);
-			}
-		}
 
 		//Pass through delay
 		if(delay.status){
@@ -131,10 +139,9 @@ void dsp::stop(void){
 	status=0;
 
 	//Reset biquads
-	unsigned int i;
-	for(i=0;i<n_EQ;i++){
-		biquad[i].stop();
-	}
+	lowshelf.stop();
+	highshelf.stop();
+
 
 	//Reset delay
 	delay.stop();
@@ -170,7 +177,7 @@ void dsp::update(void){
 
 	/*Here comes the update hash */
 	//Dummy hash
-	unsigned banks=0b10000000000001;
+	unsigned banks=0b00010000000001;
 
 
 	//General DSP bank
@@ -193,14 +200,16 @@ void dsp::update(void){
 	}
 
 	//EQ banks
-	unsigned i;
-	for(i=0;i<n_EQ;i++){
-		//EQ banks
-		if(banks&(1<<(i+c_EQ_bank))){
-			biquad[i].start();
-		}else{
-			biquad[i].stop();
-		}
+	if(banks&(1<<(c_lowshelf_bank))){
+		lowshelf.start();
+	}else{
+		lowshelf.stop();
+	}
+
+	if(banks&(1<<(c_highshelf_bank))){
+		highshelf.start();
+	}else{
+		highshelf.stop();
 	}
 
 	//Delay bank

@@ -48,7 +48,7 @@ class c_rotary{
 		const float d_base=5;
 
 		//Initial values
-		float initial_depth=50;
+		float initial_depth=100;
 		float initial_freq=5;
 };
 

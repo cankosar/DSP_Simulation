@@ -36,7 +36,8 @@ class dsp{
 		//The bank positions
 		static const unsigned short c_dsp_bank=0;
 		static const unsigned short c_tuner_bank=1;
-		static const unsigned short c_EQ_bank=2;
+		static const unsigned short c_lowshelf_bank=2;
+		static const unsigned short c_highshelf_bank=3;
 		static const unsigned short c_delay_bank=5;
 		static const unsigned short c_chorus_bank=6;
 		static const unsigned short c_overdrive_bank=7;
@@ -49,8 +50,8 @@ class dsp{
 
 
 	private:
-		const static unsigned short int n_EQ=3;
-		c_biquad biquad[n_EQ];
+		c_biquad lowshelf;
+		c_biquad highshelf;
 		c_delay delay;
 		c_chorus chorus;
 		c_overdrive overdrive;

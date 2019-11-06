@@ -86,9 +86,7 @@ float c_rotary::process(float x){
 	//Calculate the position of the pointer
 	int wptr;
 
-	wptr=rptr-lrint(t_c*FSms);
-
-//	printf("Ptr:%d Dist: %d\n",wptr,lrint(t_c*FSms));
+	wptr=rptr-rint(t_c*FSms);
 
 	if(wptr<0){
 		wptr+=rotary_len;
@@ -96,6 +94,16 @@ float c_rotary::process(float x){
 
 	//Calculate output
 	y=rbuf[wptr];
+
+//	int wptr_last;
+//	if(wptr_last==wptr){
+////		printf("Dist! (wptr=%d \t tc=%f)\n",wptr,t_c-d_base);
+//	}
+//	wptr_last=wptr;
+
+
+
+
 
 	//Update the buffer
 	rbuf[rptr]=x;
