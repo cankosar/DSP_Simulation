@@ -13,19 +13,20 @@
 
 void c_volume::init(void){
 
-	set_volume(initial_volume);
+	set_volume(&initial_volume);
 
 }
 
-void c_volume::set_volume(float v){
+void c_volume::set_volume(float *v){
 
-	if(v>1){
-		gain=fastPow(10,(double)v*0.003)-1;
+	if(*v>1){
+		gain=pregain*(fastPow(10,(double)*v*0.01)-1);
 	}else{
 		//Absolute silence
 		gain=0;
 	}
 
+	printf("Volume:%f \t Gain: %f\n",*v,gain);
 }
 
 float c_volume::process(float x){

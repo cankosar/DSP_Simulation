@@ -54,6 +54,9 @@ void dsp::init(void){
 	//Initialize autowah
 	autowah.init();
 
+	//Initialize volume
+	volume.init();
+
 	//Set status
 	status=1;
 
@@ -121,6 +124,10 @@ int dsp::process(int* x){
 		if(reverb.status){
 			y=reverb.process(y);
 		}
+
+		//Pass through volume
+		y=volume.process(y);
+
 	}else if(tuner.status){
 		tuner.process(y);
 	}
@@ -177,7 +184,7 @@ void dsp::update(void){
 
 	/*Here comes the update hash */
 	//Dummy hash
-	unsigned banks=0b00010000000001;
+	unsigned banks=0b100000000000001;
 
 
 	//General DSP bank

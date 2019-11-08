@@ -19,6 +19,7 @@
 #include "../inc/modules/flanger.hpp"
 #include "../inc/modules/autowah.hpp"
 #include "../inc/modules/compressor.hpp"
+#include "../inc/modules/volume.hpp"
 
 
 class dsp{
@@ -62,6 +63,7 @@ class dsp{
 		c_compressor compressor;
 		c_flanger flanger;
 		c_autowah autowah;
+		c_volume volume;
 };
 
 

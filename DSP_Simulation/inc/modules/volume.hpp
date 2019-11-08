@@ -8,10 +8,6 @@
 #ifndef INC_MODULES_VOLUME_HPP_
 #define INC_MODULES_VOLUME_HPP_
 
-
-
-
-
 #endif /* INC_MODULES_VOLUME_HPP_ */
 
 
@@ -19,11 +15,17 @@ class c_volume{
 
 	public:
 		void init(void);
-		void set_volume(float v);
+		void set_volume(float *v);
 		float process(float v);
+
+		bool status;
 	private:
+
 		float gain;
-		float initial_volume=50;
+
+		//Calibration and initial parameters
+		float pregain=0.2;
+		float initial_volume=100;
 
 		inline double fastPow(double a, double b) {
 			union {
