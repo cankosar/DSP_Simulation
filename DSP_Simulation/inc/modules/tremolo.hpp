@@ -44,9 +44,9 @@ class c_tremolo{
 		unsigned type;		//0:triangle 1:square 2: sinus
 
 		//Initial vaules
-		float initial_depth=100;
-		float initial_freq=20;
-		float initial_type=1;
+		float initial_depth=50;
+		float initial_freq=10;
+		float initial_type=2;
 };
 
 

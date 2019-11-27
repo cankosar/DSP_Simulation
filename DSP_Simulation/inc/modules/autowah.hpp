@@ -62,7 +62,7 @@ class c_autowah{
 		//Initial parameters
 		float initial_input_gain=0.3;
 		float initial_quality=1.2; 			//Wet gain (Dry/Wet mix)
-		float initial_depth=50; 		//Depth
+		float initial_depth=80; 		//Depth
 		float initial_rate=2.5;
 		float initial_freq_low=400;
 		float initial_freq_high=2800;

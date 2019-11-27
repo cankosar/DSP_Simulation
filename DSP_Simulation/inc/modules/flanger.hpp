@@ -49,7 +49,7 @@ class c_flanger{
 		//Initial parameters
 		float initial_wet=50; 			//Wet gain (Dry/Wet mix)
 		float initial_depth=50; 		//Depth
-		float initial_rate=2;
+		float initial_rate=1;
 		float initial_feedback=50;
 
 

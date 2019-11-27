@@ -12,10 +12,16 @@
 void dsp::init(void){
 
 	//Initialize Biquad filters
+//	lowshelf.init();
+//	lowshelf.set_filter_type(3);
+//	lowshelf.set_freq(100);
+//	lowshelf.set_gain(0);
+//	lowshelf.set_quality(1);
+
 	lowshelf.init();
-	lowshelf.set_filter_type(3);
-	lowshelf.set_freq(100);
-	lowshelf.set_gain(0);
+	lowshelf.set_filter_type(4);
+	lowshelf.set_freq(4000);
+	lowshelf.set_gain(10);
 	lowshelf.set_quality(1);
 
 	highshelf.init();
@@ -184,7 +190,7 @@ void dsp::update(void){
 
 	/*Here comes the update hash */
 	//Dummy hash
-	unsigned banks=0b100000000000001;
+	unsigned banks=0b100000100000001;
 
 
 	//General DSP bank

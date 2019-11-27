@@ -99,7 +99,7 @@ void c_reverb::set_wet(float* w){
 
 	//Update the dry&wet mix
 	wetmix=*w*0.01;
-	drymix=1-wetmix;
+	drymix=1;
 
 }
 

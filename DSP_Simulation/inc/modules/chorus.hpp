@@ -44,7 +44,7 @@ class c_chorus{
 		//Initial parameters
 		float initial_wet=30; 			//Wet gain (Dry/Wet mix)
 		float initial_depth=50; 		//Depth
-		float initial_rate=7;
+		float initial_rate=15;
 
 
 

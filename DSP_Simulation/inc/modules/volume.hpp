@@ -25,7 +25,7 @@ class c_volume{
 
 		//Calibration and initial parameters
 		float pregain=0.2;
-		float initial_volume=100;
+		float initial_volume=80;
 
 		inline double fastPow(double a, double b) {
 			union {

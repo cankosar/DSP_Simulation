@@ -50,15 +50,15 @@ class c_reverb{
 		float bufap4[sbuf_ap_4];
 
 		//Calibration values
-		const float fixedgain		= 0.01f;
-		const float scaledamp		= 0.4f;
+		const float fixedgain		= 0.008f;
+		const float scaledamp		= 0.95f;
 		const float scaleroom		= 0.28f;
 		const float offsetroom	= 0.7f;
 
 		//Initial values
-		float initial_size	= 80.0f;
-		float initial_damp	= 40.0f;
-		float initial_wet	= 60.0f;
+		float initial_size	= 100.0f;
+		float initial_damp	= 50.0f;
+		float initial_wet	= 50.0f;
 
 		//Instances
 		c_comb comb[n_comb];

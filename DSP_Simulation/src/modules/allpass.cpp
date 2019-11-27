@@ -71,17 +71,19 @@ void c_allpass::set_feedback(float *fb){
 float c_allpass::process(float x){
 
 	float y;
-	float bufout;
 
-	bufout = buffer[aptr];
-//	printf("aptr=%d\n",aptr);
-//	undenormalise(bufout);
 
 //	y = -x + bufout;
 //	buffer[aptr] = x + (bufout*feedback);
 
-	buffer[aptr] = x + (bufout*feedback);
-	y = -buffer[aptr]*feedback + bufout;
+//	float bufout;
+//	bufout = buffer[aptr];
+//	y = -x*feedback + bufout;
+//	buffer[aptr] = x + (bufout*feedback);
+
+	y=buffer[aptr]-feedback*x;
+
+	buffer[aptr]=y*feedback+x;
 
 	if(++aptr>=bufsize) aptr = 0;
 
